@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/Bsuir.Misoi/Core/bin/Debug
+/src/Bsuir.Misoi/Core/obj/Debug
+/src/Bsuir.Misoi/.vs/Bsuir.Misoi/v14/.suo
