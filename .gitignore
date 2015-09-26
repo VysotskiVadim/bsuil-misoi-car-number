@@ -1,3 +1,4 @@
-﻿/src/Core/bin/
-/src/Core/obj/
-/src/.vs/Bsuir.Misoi/v14/.suo
+﻿src/artifacts/
+*.xproj
+*.user
+src/.vs/
