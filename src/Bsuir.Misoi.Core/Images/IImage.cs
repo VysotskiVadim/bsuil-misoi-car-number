@@ -8,8 +8,12 @@ namespace Bsuir.Misoi.Core.Images
 
 		Pixel GetPixel(int x, int y);
 
-		void SetPixel(Pixel pixel, int x, int y);
+		void SetPixel(int x, int y, Pixel pixel);
 
 		void Save(Stream saveStream);
+
+		int Height { get; }
+
+		int Width { get; }
 	}
 }

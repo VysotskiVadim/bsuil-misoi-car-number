@@ -14,7 +14,11 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 			_bitmap = bitmap;
 		}
 
+		public int Height => _bitmap.Height;
+
 		public string Name { get; set; }
+
+		public int Width => _bitmap.Width;
 
 		public Pixel GetPixel(int x, int y)
 		{
@@ -37,7 +41,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             _bitmap.Save(saveStream, imageFormat);
 		}
 
-		public void SetPixel(Pixel pixel, int x, int y)
+		public void SetPixel(int x, int y, Pixel pixel)
 		{
 			var color = Color.FromArgb(0, pixel.R, pixel.G, pixel.B);
 			_bitmap.SetPixel(x, y, color);
