@@ -16,6 +16,9 @@ namespace Bsuir.Misoi.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
 			services.AddMvc();
+
+			services.AddTransient<Core.Images.IImageFactory, Core.Images.Implementation.ImageFactory>();
+			services.AddTransient<Core.Images.Filtering.IFilterService, Core.Images.Filtering.Implementation.FilterService>();
         }
 
         public void Configure(IApplicationBuilder app)

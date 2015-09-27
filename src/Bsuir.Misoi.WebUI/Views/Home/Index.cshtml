@@ -1,15 +1,21 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Filtering page</title>
+﻿@model IEnumerable<string>
 
-</head>
-<body>
-    <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file"/>
-        <input type="submit" value="submit" />
-    </form>
-</body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Filtering page</title>
+
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data">
+            @foreach (var item in Model)
+            {
+                <input type="radio" name="filter" value="@item">@item<br>
+            }
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="submit" />
+        </form>
+    </body>
 </html>
 
