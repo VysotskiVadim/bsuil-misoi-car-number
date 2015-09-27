@@ -20,7 +20,7 @@ namespace Bsuir.Misoi.WebUI
         {
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync(Class1.Hello);
             });
         }
     }
