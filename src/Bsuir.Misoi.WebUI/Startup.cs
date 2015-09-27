@@ -6,6 +6,7 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
 using Bsuir.Misoi.Core;
+using Microsoft.AspNet.Diagnostics;
 
 namespace Bsuir.Misoi.WebUI
 {
@@ -14,14 +15,13 @@ namespace Bsuir.Misoi.WebUI
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync(Class1.Hello);
-            });
-        }
+			app.UseMvc();
+			app.UseErrorPage();
+		}
     }
 }
