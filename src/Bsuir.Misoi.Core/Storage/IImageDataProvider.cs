@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Bsuir.Misoi.Core.Storage
@@ -7,6 +8,8 @@ namespace Bsuir.Misoi.Core.Storage
 	{
 		Stream GetImage(string name);
 
-		Task SaveImageAsync();
-    }
+		Stream GetStreamForSaving(string name);
+
+		Task<IEnumerable<string>> GetAllImagesNames();
+	}
 }
