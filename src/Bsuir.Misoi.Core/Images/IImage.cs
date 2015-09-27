@@ -2,8 +2,8 @@
 {
 	public interface IImage
     {
-		IPixel GetPixel(int x, int y);
+		Pixel GetPixel(int x, int y);
 
-		void SetPixel(IPixel pixel, int x, int y);
+		void SetPixel(Pixel pixel, int x, int y);
     }
 }
