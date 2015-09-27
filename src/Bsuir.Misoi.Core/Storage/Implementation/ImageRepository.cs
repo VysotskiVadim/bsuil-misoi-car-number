@@ -10,17 +10,18 @@ namespace Bsuir.Misoi.Core.Storage.Implementation
 	public class ImageRepository : IImageRepository
 	{
 		private readonly IImageDataProvider _imageDataProvider;
+		private readonly IImageFactory _imageFactory;
 
-		public ImageRepository(IImageDataProvider imageDataProvider)
+		public ImageRepository(IImageDataProvider imageDataProvider, IImageFactory imageFactory)
 		{
 			_imageDataProvider = imageDataProvider;
+			_imageFactory = imageFactory;
         }
 
 		public Task<IImage> GetImageAsync(string name)
 		{
 			var imageStream = _imageDataProvider.GetImage(name);
-			IImage image = new BitmapImage(new System.Drawing.Bitmap(imageStream));
-			image.Name = name;
+			var image = _imageFactory.CreateImage(name, imageStream);
 			return Task.FromResult(image);
 		}
 
