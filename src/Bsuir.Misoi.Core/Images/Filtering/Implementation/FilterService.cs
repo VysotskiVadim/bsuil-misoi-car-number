@@ -37,6 +37,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 		private void RegiterFilters(IList<IFilter> filters)
 		{
 			filters.Add(new FakeFilter());
+			filters.Add(new BinarizationFilter());
 		}
 	}
 }
