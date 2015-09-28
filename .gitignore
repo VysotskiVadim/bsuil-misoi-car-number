@@ -1,4 +1,2 @@
 ﻿src/artifacts/
-*.xproj
-*.user
 src/.vs/
