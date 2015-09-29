@@ -38,6 +38,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 		{
 			filters.Add(new FakeFilter());
 			filters.Add(new BinarizationFilter());
+            filters.Add(new GammaFilter());
 		}
 	}
 }
