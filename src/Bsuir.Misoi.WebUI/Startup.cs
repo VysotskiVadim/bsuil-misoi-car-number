@@ -19,6 +19,7 @@ namespace Bsuir.Misoi.WebUI
 
 			services.AddTransient<Core.Images.IImageFactory, Core.Images.Implementation.ImageFactory>();
 			services.AddTransient<Core.Images.Filtering.IFilterService, Core.Images.Filtering.Implementation.FilterService>();
+	        services.AddTransient<Bsuir.Misoi.Core.Images.Filtering.IConvolutionFilter, Core.Images.Filtering.Implementation.ConvolutionFilter>();
         }
 
         public void Configure(IApplicationBuilder app)
