@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,13 +13,19 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
 	    public void Filter(IImage image, double[,] filter)
 	    {
+		    if (filter.GetLength(0) != filter.GetLength(1))
+		    {
+			    throw new ArgumentException("invalid filter", nameof(filter));
+		    }
+
+
 		    var result = new Pixel[image.Width, image.Height];
 
 			double blue = 0.0;
 			double green = 0.0;
 			double red = 0.0;
 
-			int filterOffset = (filter.Length - 1 ) / 2;
+			int filterOffset = (filter.GetLength(0) - 1 ) / 2;
 			for (int offsetY = filterOffset; offsetY < image.Height - filterOffset; offsetY++)
 			{
 				for (int offsetX = filterOffset; offsetX < image.Width - filterOffset; offsetX++)
@@ -39,11 +46,17 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 					green = Factor * green + Bias;
 					red = Factor * red + Bias;
 
-					result[offsetX, offsetY].R = this.ToByte(red);
-					result[offsetX, offsetY].G = this.ToByte(green);
-					result[offsetX, offsetY].B = this.ToByte(blue);
+					result[offsetX, offsetY] = new Pixel { R = this.ToByte(red), G = this.ToByte(green), B = this.ToByte(blue) };
 				}
 			}
+
+		    for (int x = 0; x < result.GetLength(0); x++)
+		    {
+			    for (int y = 0; y < result.GetLength(1); y++)
+			    {
+				    image.SetPixel(x, y, result[x, y]);
+			    }
+		    }
 		}
 
 	    private byte ToByte(double value)
