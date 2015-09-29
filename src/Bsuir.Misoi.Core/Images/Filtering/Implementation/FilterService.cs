@@ -36,9 +36,9 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
 		private void RegiterFilters(IList<IFilter> filters)
 		{
-			filters.Add(new FakeFilter());
 			filters.Add(new BinarizationFilter());
             filters.Add(new GammaFilter());
+			filters.Add(new LaplacianFiveFilter(new ConvolutionFilter()));
 		}
 	}
 }
