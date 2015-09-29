@@ -30,12 +30,16 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 			{
 				for (int offsetX = filterOffset; offsetX < image.Width - filterOffset; offsetX++)
 				{
-					var imagePixel = image.GetPixel(offsetX, offsetY);
-				
+					blue = 0;
+					green = 0;
+					red = 0;
+
 					for (int filterY = -filterOffset; filterY <= filterOffset; filterY++)
 					{
 						for (int filterX = -filterOffset; filterX <= filterOffset; filterX++)
 						{
+							var imagePixel = image.GetPixel(offsetX + filterX, offsetY + filterY);
+
 							blue += (double)(imagePixel.B) * filter[filterY + filterOffset, filterX + filterOffset];
 							green += (double)(imagePixel.G) * filter[filterY + filterOffset, filterX + filterOffset];
 							red += (double)(imagePixel.R) * filter[filterY + filterOffset, filterX + filterOffset];
