@@ -8,7 +8,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 {
 	public class BinarizationFilter : IFilter
 	{
-		public string Name => "adaptive binarization";
+		public string Name => "Adaptive binarization";
 		private const int noise = 12;
 		
 		public void Filter(IImage image)

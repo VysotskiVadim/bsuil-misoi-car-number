@@ -7,7 +7,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 {
     public class MedianFilter : IFilter
     {
-        public string Name => "median filter";
+        public string Name => "Median filter";
 
         public void Filter(IImage image)
         {
@@ -22,21 +22,13 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             {
                 for (int y = rad + 1; y < h_b - rad; y++)
                 {
-                   // var pixel = image.GetPixel(x, y);
-                  //  var rgb = (int)((pixel.R + pixel.G + pixel.B) / 3);
                     median_filter(image, x, y); 
 
                 }
-
             }
-
-           // pictureBox1.Refresh();
-            //toolStripProgressBar1.Value = 0;
-
-
         }
 
-        // Что тут происходит Т_Т
+   
         private int partition(int[] a, int p, int r)
         {
             int x = a[r];
@@ -125,11 +117,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             cG_ = cG[n_];
             cB_ = cB[n_];
 
-
-
             image.SetPixel(x, y, new Pixel { R = (byte)cR_, G = (byte)cG_, B = (byte)cB_ });
-
-
         }
 
 
