@@ -41,7 +41,7 @@ namespace Bsuir.Misoi.WebUI.Controllers
             var image = _filterService.ApplyFilter(filter, fileName, file.OpenReadStream());
             image.Name = Guid.NewGuid().ToString() + Path.GetExtension(image.Name);
             await _imageRepository.SaveImageAsync(image);
-            return image.Name;
+            return "image/" + image.Name;
         }
 
         [Route("image/{name}")]

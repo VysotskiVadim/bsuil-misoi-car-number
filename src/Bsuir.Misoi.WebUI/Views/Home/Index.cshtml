@@ -19,7 +19,7 @@
               contentType: false   // tell jQuery not to set contentType
             }).done(function (data) {
                 var resultContainer = document.getElementById("resultContainer");
-                $(resultContainer).append("<img src='data:image/png;base64," + data + "' />")
+                $(resultContainer).append("<img src='" + data + "' />")
             });
             return false;
         }
