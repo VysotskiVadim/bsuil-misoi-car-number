@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 
 namespace Bsuir.Misoi.Core.Images.Filtering
 {
-	public interface IFilterService
+    public interface IFilterService
     {
-		IList<string> GetFilterNames();
+        IList<string> GetFilterNames();
 
-		Task<IImage> ApplyFilterAsync(string filterName, string imageName);
-
-		IImage ApplyFilter(string filterName, string imageName, Stream imageData);
+        IImage ApplyFilter(string filterName, string imageName, Stream imageData);
     }
 }

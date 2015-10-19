@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace Bsuir.Misoi.Core.Storage
 {
-	public interface IImageDataProvider
-	{
-		Stream GetImage(string name);
+    public interface IImageDataProvider
+    {
+        Stream GetImage(string name);
 
-		Stream GetStreamForSaving(string name);
+        Stream GetStreamForSaving(string name);
 
-		Task<IEnumerable<string>> GetAllImagesNames();
-	}
+        Task<IEnumerable<string>> GetAllImagesNames();
+    }
 }
