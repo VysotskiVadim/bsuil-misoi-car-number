@@ -20,16 +20,20 @@ namespace Bsuir.Misoi.Core.Storage.Implementation
 
         public Task<IImage> GetImageAsync(string name)
         {
-            var imageStream = _imageDataProvider.GetImage(name);
-            var image = _imageFactory.CreateImage(name, imageStream);
-            return Task.FromResult(image);
+            using (var imageStream = _imageDataProvider.GetImage(name))
+            {
+                var image = _imageFactory.CreateImage(name, imageStream);
+                return Task.FromResult(image);
+            }
         }
 
         public Task SaveImageAsync(IImage image)
         {
-            var saveStream = _imageDataProvider.GetStreamForSaving(image.Name);
-            image.Save(saveStream);
-            return Task.FromResult(true);
+            using (var saveStream = _imageDataProvider.GetStreamForSaving(image.Name))
+            {
+                image.Save(saveStream);
+                return Task.FromResult(true);
+            }
         }
     }
 }
