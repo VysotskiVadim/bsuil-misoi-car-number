@@ -12,13 +12,13 @@ using Microsoft.Net.Http.Headers;
 namespace Bsuir.Misoi.WebUI.Controllers
 {
     [Route("")]
-    public class NumberSelectionController : Controller
+    public class FindingController : Controller
     {
         private readonly IImageRepository _imageRepository;
         private readonly IImageDataProvider _imageDataProvider;
         private readonly IFindingService _findingService;
 
-        public NumberSelectionController(IImageRepository imageRepository, IImageDataProvider imageDataProvider, IFindingService findingService)
+        public FindingController(IImageRepository imageRepository, IImageDataProvider imageDataProvider, IFindingService findingService)
         {
             _imageRepository = imageRepository;
             _imageDataProvider = imageDataProvider;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Bsuir.Misoi.Core.Images.Filtering.Implementation;
 
 namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
@@ -47,6 +48,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
         private IEnumerable<IFindAlgorithm> Register()
         {
             yield return new FakeFindAlgorithm();
+            yield return new HoughLinesFindingAlgorithm(new BinarizationFilter());
         }
     }
 }
