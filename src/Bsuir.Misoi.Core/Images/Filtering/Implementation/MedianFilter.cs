@@ -98,7 +98,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
                 for (int j = y - rad; j < y + rad + 1; j++)
                 {
 
-                    Pixel pixel = image.GetPixel(i, j);
+                    IImage pixel = image.GetPixel(i, j);
                     cR[k] = Convert.ToInt32(pixel.R);
                     cG[k] = Convert.ToInt32(pixel.G);
                     cB[k] = Convert.ToInt32(pixel.B);
@@ -117,7 +117,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             cG_ = cG[n_];
             cB_ = cB[n_];
 
-            image.SetPixel(x, y, new Pixel { R = (byte)cR_, G = (byte)cG_, B = (byte)cB_ });
+            image.SetPixel(x, y, new IImage { R = (byte)cR_, G = (byte)cG_, B = (byte)cB_ });
         }
 
 

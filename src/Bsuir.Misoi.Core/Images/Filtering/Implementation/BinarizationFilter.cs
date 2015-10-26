@@ -31,11 +31,11 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
                     if (pixel > middle + noise)
                     {
-                        image.SetPixel(x, y, new Pixel { R = 255, G = 255, B = 255 });
+                        image.SetPixel(x, y, new IImage { R = 255, G = 255, B = 255 });
                     }
                     else
                     {
-                        image.SetPixel(x, y, new Pixel());
+                        image.SetPixel(x, y, new IImage());
                     }
                 }
             }

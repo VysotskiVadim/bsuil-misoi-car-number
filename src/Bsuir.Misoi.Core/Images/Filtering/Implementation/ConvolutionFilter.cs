@@ -19,7 +19,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 		    }
 
 
-		    var result = new Pixel[image.Width, image.Height];
+		    var result = new IImage[image.Width, image.Height];
 
 			double blue = 0.0;
 			double green = 0.0;
@@ -50,7 +50,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 					green = Factor * green + Bias;
 					red = Factor * red + Bias;
 
-					result[offsetX, offsetY] = new Pixel { R = this.ToByte(red), G = this.ToByte(green), B = this.ToByte(blue) };
+					result[offsetX, offsetY] = new IImage { R = this.ToByte(red), G = this.ToByte(green), B = this.ToByte(blue) };
 				}
 			}
 

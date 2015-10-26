@@ -6,9 +6,9 @@ namespace Bsuir.Misoi.Core.Images
     {
 		string Name { get; set; }
 
-		Pixel GetPixel(int x, int y);
+		IImage GetPixel(int x, int y);
 
-		void SetPixel(int x, int y, Pixel pixel);
+		void SetPixel(int x, int y, IImage pixel);
 
 		void Save(Stream saveStream);
 

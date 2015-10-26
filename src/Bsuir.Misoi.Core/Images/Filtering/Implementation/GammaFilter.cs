@@ -14,7 +14,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
         public void Filter(IImage image)
         {
           
-            Pixel c;
+            IImage c;
 
             byte[] gammaArray = CreateGammaArray(GammaValue);
 
@@ -23,7 +23,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
                 for (int j = 0; j < image.Height; j++)
                 {
                     c = image.GetPixel(i, j);
-                    image.SetPixel(i, j, new Pixel { R = gammaArray[c.R], G = gammaArray[c.G], B = gammaArray[c.B] });
+                    image.SetPixel(i, j, new IImage { R = gammaArray[c.R], G = gammaArray[c.G], B = gammaArray[c.B] });
                 }
             }
            

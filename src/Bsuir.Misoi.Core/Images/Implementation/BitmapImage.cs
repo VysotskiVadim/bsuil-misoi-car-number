@@ -33,10 +33,10 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
         public int Width => _width;
 
-        public Pixel GetPixel(int x, int y)
+        public IImage GetPixel(int x, int y)
         {
             int byteOffset = y * _bitMapStride + x * 4;
-            return new Pixel { B = _pixelBuffer[byteOffset], G = _pixelBuffer[byteOffset + 1], R = _pixelBuffer[byteOffset + 2] };
+            return new IImage { B = _pixelBuffer[byteOffset], G = _pixelBuffer[byteOffset + 1], R = _pixelBuffer[byteOffset + 2] };
         }
 
         public void Save(Stream saveStream)
@@ -65,7 +65,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             resultBitmap.Dispose();
         }
 
-        public void SetPixel(int x, int y, Pixel pixel)
+        public void SetPixel(int x, int y, IImage pixel)
         {
             int byteOffset = y * _bitMapStride + x * 4;
             _pixelBuffer[byteOffset] = pixel.B;

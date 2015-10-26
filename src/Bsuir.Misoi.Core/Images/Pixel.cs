@@ -2,9 +2,9 @@
 
 namespace Bsuir.Misoi.Core.Images
 {
-    public struct Pixel
+    public struct IImage
     {
-		internal Pixel(Color color)
+		internal IImage(Color color)
 		{
 			this.R = color.R;
 			this.G = color.G;

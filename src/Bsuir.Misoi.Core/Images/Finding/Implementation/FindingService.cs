@@ -37,7 +37,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
                         if ((y < selectedArea.Y + borderWidth || y + borderWidth > finishY) ||
                             (x < selectedArea.X + borderWidth || x + borderWidth > finishX))
                         {
-                            image.SetPixel(x, y, new Pixel {R = 255, B = 0, G = 0});
+                            image.SetPixel(x, y, new IImage {R = 255, B = 0, G = 0});
                         }
                     }
                 }

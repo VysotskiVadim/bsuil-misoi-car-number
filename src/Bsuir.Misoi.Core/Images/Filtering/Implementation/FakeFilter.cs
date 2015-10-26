@@ -15,7 +15,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 			{
 				for (int y = 0; y < image.Height; y++)
 				{
-					image.SetPixel(x, y, new Pixel());
+					image.SetPixel(x, y, new IImage());
 				}
 			}
 		}
