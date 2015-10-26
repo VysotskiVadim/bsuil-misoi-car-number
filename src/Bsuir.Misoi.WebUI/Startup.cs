@@ -6,6 +6,8 @@ using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
 using Bsuir.Misoi.Core;
+using Bsuir.Misoi.Core.Images.Selection;
+using Bsuir.Misoi.Core.Images.Selection.Implementation;
 using Microsoft.AspNet.Diagnostics;
 using Bsuir.Misoi.WebUI.HostingFileSystem;
 
@@ -23,6 +25,7 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<Bsuir.Misoi.Core.Images.Filtering.IConvolutionFilter, Core.Images.Filtering.Implementation.ConvolutionFilter>();
             services.AddTransient<Bsuir.Misoi.Core.Storage.IImageRepository, Bsuir.Misoi.Core.Storage.Implementation.ImageRepository>();
             services.AddTransient<Bsuir.Misoi.Core.Storage.IImageDataProvider, ImageDataProvider>();
+            services.AddTransient<ISelectionService, SelectionService>();
         }
 
         public void Configure(IApplicationBuilder app)
