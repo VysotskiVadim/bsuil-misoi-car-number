@@ -13,12 +13,21 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
         public void Filter(IImage image)
         {
+            var indencity = new byte[image.Width, image.Height];
             for (int x = 0; x < image.Width; x++)
             {
                 for (int y = 0; y < image.Height; y++)
                 {
-                    var middle = GetMiddlePixelArea(x, y, image);
-                    var pixel = GetPixel(image, x, y);
+                    indencity[x, y] = this.GetIndencity(image, x, y);
+                }
+            }
+
+            for (int x = 0; x < image.Width; x++)
+            {
+                for (int y = 0; y < image.Height; y++)
+                {
+                    var middle = GetMiddlePixelArea(x, y, image, indencity);
+                    var pixel = indencity[x, y];
 
                     if (pixel > middle + noise)
                     {
@@ -32,7 +41,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             }
         }
 
-        private double GetMiddlePixelArea(int x, int y, IImage image)
+        private double GetMiddlePixelArea(int x, int y, IImage image, byte[,] indencities)
         {
             var radius = 13;
 
@@ -48,7 +57,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             {
                 for (int j = top; j < bottom; j++)
                 {
-                    var pixel = GetPixel(image, i, j);
+                    var pixel = indencities[i, j];
                     intensity += pixel;
                     count++;
                 }
@@ -57,10 +66,10 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             return (double)(intensity / count);
         }
 
-        private int GetPixel(IImage image, int x, int y)
+        private byte GetIndencity(IImage image, int x, int y)
         {
             var pixel = image.GetPixel(x, y);
-            return (int)((pixel.R + pixel.G + pixel.B) / 3);
+            return (byte)((pixel.R + pixel.G + pixel.B) / 3);
         }
     }
 }
