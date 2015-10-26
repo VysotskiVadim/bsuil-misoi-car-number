@@ -1,6 +1,6 @@
-﻿namespace Bsuir.Misoi.Core.Images.Selection
+﻿namespace Bsuir.Misoi.Core.Images.Finding
 {
-    public interface ISelectionResult
+    public interface IFindResult
     {
         int X { get; }
 

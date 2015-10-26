@@ -2,14 +2,14 @@
 using System.IO;
 using System.Linq;
 
-namespace Bsuir.Misoi.Core.Images.Selection.Implementation
+namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
-    public class SelectionService : ISelectionService
+    public class FindingService : IFindingService
     {
         private readonly IImageFactory _imageFactory;
-        private readonly IEnumerable<ISelector> _selectors; 
+        private readonly IEnumerable<IFindAlgorithm> _selectors; 
 
-        public SelectionService(IImageFactory imageFactory)
+        public FindingService(IImageFactory imageFactory)
         {
             _imageFactory = imageFactory;
             _selectors = this.Register();
@@ -23,7 +23,7 @@ namespace Bsuir.Misoi.Core.Images.Selection.Implementation
         public IImage ApplySelector(string selector, string fileName, Stream fileStram)
         {
             var image = _imageFactory.CreateImage(fileName, fileStram);
-            var selectedAreas = _selectors.Single(f => f.Name == selector).Select(image);
+            var selectedAreas = _selectors.Single(f => f.Name == selector).Find(image);
             foreach (var selectedArea in selectedAreas)
             {
                 const int borderWidth = 3;
@@ -44,9 +44,9 @@ namespace Bsuir.Misoi.Core.Images.Selection.Implementation
             return image;
         }
 
-        private IEnumerable<ISelector> Register()
+        private IEnumerable<IFindAlgorithm> Register()
         {
-            yield return new FakeSelector();
+            yield return new FakeFindAlgorithm();
         }
     }
 }

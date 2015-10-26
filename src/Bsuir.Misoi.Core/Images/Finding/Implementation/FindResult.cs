@@ -1,8 +1,8 @@
-﻿namespace Bsuir.Misoi.Core.Images.Selection.Implementation
+﻿namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
-    public class SelectionResult : ISelectionResult
+    public class FindResult : IFindResult
     {
-        public SelectionResult(int x, int y, int height, int width)
+        public FindResult(int x, int y, int height, int width)
         {
             this.X = x;
             this.Y = y;

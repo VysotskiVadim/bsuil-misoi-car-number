@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Bsuir.Misoi.Core.Images.Selection;
+using Bsuir.Misoi.Core.Images.Finding;
 using Bsuir.Misoi.Core.Storage;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
@@ -14,22 +14,22 @@ namespace Bsuir.Misoi.WebUI.Controllers
     [Route("")]
     public class NumberSelectionController : Controller
     {
-        private readonly ISelectionService _selectionService;
         private readonly IImageRepository _imageRepository;
         private readonly IImageDataProvider _imageDataProvider;
+        private readonly IFindingService _findingService;
 
-        public NumberSelectionController(ISelectionService selectionService, IImageRepository imageRepository, IImageDataProvider imageDataProvider)
+        public NumberSelectionController(IImageRepository imageRepository, IImageDataProvider imageDataProvider, IFindingService findingService)
         {
-            _selectionService = selectionService;
             _imageRepository = imageRepository;
             _imageDataProvider = imageDataProvider;
+            _findingService = findingService;
         }
 
         [Route("")]
         [HttpGet]
         public IActionResult Index()
         {
-            var filters = _selectionService.GetAllSelectors();
+            var filters = _findingService.GetAllSelectors();
             return View(filters);
         }
 
@@ -40,7 +40,7 @@ namespace Bsuir.Misoi.WebUI.Controllers
             var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Replace("\"", string.Empty);
             using (var fileStram = file.OpenReadStream())
             {
-                var image = _selectionService.ApplySelector(selector, fileName, fileStram);
+                var image = _findingService.ApplySelector(selector, fileName, fileStram);
                 image.Name = Guid.NewGuid() + Path.GetExtension(image.Name);
                 await _imageRepository.SaveImageAsync(image);
                 return "image/" + image.Name;
