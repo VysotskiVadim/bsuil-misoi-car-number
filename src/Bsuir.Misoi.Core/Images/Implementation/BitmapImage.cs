@@ -24,6 +24,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             _pixelBuffer = new byte[_bitMapStride * bitmap.Height];
             Marshal.Copy(bitmapData.Scan0, _pixelBuffer, 0, _pixelBuffer.Length);
             bitmap.UnlockBits(bitmapData);
+            bitmap.Dispose();
         }
 
         public int Height => _height;
@@ -61,6 +62,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                 imageFormat = ImageFormat.Jpeg;
             }
             resultBitmap.Save(saveStream, imageFormat);
+            resultBitmap.Dispose();
         }
 
         public void SetPixel(int x, int y, Pixel pixel)
