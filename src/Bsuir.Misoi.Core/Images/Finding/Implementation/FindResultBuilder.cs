@@ -7,7 +7,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
     public class FindResultBuilder
     {
-        private List<Point> _points;
+        private List<Point> _points = new List<Point>();
 
         public void Add(int x, int y)
         {

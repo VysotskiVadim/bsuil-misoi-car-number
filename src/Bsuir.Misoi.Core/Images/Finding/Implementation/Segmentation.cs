@@ -180,10 +180,27 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 
 
             // ТУТ НУЖНО НАЙТИ ДАННЫЕ
-            //for (int i = 0, )
-            //if (results[i])
-
-            yield return new FindResult(10, 10, 20, 20);
+            for (int x = 0; x < segment.Length; x++)
+            {
+                if (results[x])
+                {
+                    FindResultBuilder resultBuilder = new FindResultBuilder();
+                    for (int j = 0; j < inputImage.Height; j++)  // цикл по пикселям изображения
+                    {
+                        for (int i = 0; i < inputImage.Width; i++)
+                        {
+                            if (image[i, j] == x)
+                            {
+                                resultBuilder.Add(i, j);
+                            }
+                        }
+                    }
+                    yield return resultBuilder.GetResult();
+                }
+            }
+            
+            
+            //yield return new FindResult(10, 10, 20, 20);
         }
     }
 }
