@@ -35,6 +35,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
             filters.Add(new GammaFilter());
             filters.Add(new LaplacianFiveFilter(new ConvolutionFilter()));
             filters.Add(new MedianFilter());
+            filters.Add(new Segmentation());
         }
     }
 }
