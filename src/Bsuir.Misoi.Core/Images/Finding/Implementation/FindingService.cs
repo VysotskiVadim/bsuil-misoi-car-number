@@ -49,6 +49,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
         {
             yield return new FakeFindAlgorithm();
             yield return new HoughLinesFindingAlgorithm(new BinarizationFilter());
+            yield return new Segmentation(new BinarizationFilter());
         }
     }
 }

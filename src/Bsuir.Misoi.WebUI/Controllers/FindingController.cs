@@ -35,14 +35,14 @@ namespace Bsuir.Misoi.WebUI.Controllers
 
         [Route("")]
         [HttpPost]
-        public async Task<string> ProcessImage(IFormFile file, string selector)
+        public string ProcessImage(IFormFile file, string selector)
         {
             var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Replace("\"", string.Empty);
             using (var fileStram = file.OpenReadStream())
             {
                 var image = _findingService.ApplySelector(selector, fileName, fileStram);
                 image.Name = Guid.NewGuid() + Path.GetExtension(image.Name);
-                await _imageRepository.SaveImageAsync(image);
+                _imageRepository.SaveImageAsync(image).Wait();
                 return "image/" + image.Name;
             }
         }

@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Bsuir.Misoi.Core.Images.Filtering;
+using Bsuir.Misoi.Core.Images.Filtering.Implementation;
 
-namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
+namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
-    public class Segmentation : IFilter
+    public class Segmentation : IFindAlgorithm
     {
-        public string Name
-        {
-            get
-            {
-                return "Segmentation";
-            }
-        }
-        
+        private readonly IFilter _binarizationFilter;
+        public string Name => "Segmentation";
 
         // данные и 3 метода  для работы с системой непересекающихся множеств
         private int[] segment = new int[100000]; // массив эквивалентых класов-сегментов
         private  int[] rank = new int[100000]; // ранги эквивалентных классов, в общем-то тут не обязательны
+
+        public Segmentation(IFilter binarizationFilter)
+        {
+            _binarizationFilter = binarizationFilter;
+        }
 
         private void MakeSet(int x) // создание сегмента
         {
@@ -56,28 +55,31 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
         private int[,] image;  //  image in int-matrix type
 
+        
+
         private void ConvertImageToBinaryMatrix(IImage inputImage)  // перевод пиксельного изображения в матричный вид типа int
         { 
-            image = new int[inputImage.Height, inputImage.Width];
-            for (int i =0; i < inputImage.Height; i++  )
+            image = new int[inputImage.Width, inputImage.Height];
+            for (int i =0; i < inputImage.Width; i++  )
             {
-                for (int j = 0; j < inputImage.Width; j++)
+                for (int j = 0; j < inputImage.Height; j++)
                 {
                     image[i, j] = BinaryPixel(inputImage.GetPixel(i, j));
                 }
             }
         }
 
-        public void Filter(IImage inputImage)   // конкретно сегментация  работает c бинарной матрицой - быстрее будет, чем работа с пиксельным представлением изображения
+        public IEnumerable<IFindResult> Find(IImage inputImage)   // конкретно сегментация  работает c бинарной матрицой - быстрее будет, чем работа с пиксельным представлением изображения
         {           
+            _binarizationFilter.Filter(inputImage);
             ConvertImageToBinaryMatrix(inputImage);
 
             int segmentNum = 1; // номер нового класса, бинарное изображение или 0 или 1, считанём с 2ух :D
             int B = 0, C = 0, A = 0;
            
-            for (int i = 0; i < inputImage.Height; i++)  // Цикл по пикселям изображения
+            for (int i = 0; i < inputImage.Width; i++)  // Цикл по пикселям изображения
             {
-                for (int j = 0; j < inputImage.Width; j++)
+                for (int j = 0; j < inputImage.Height; j++)
                 {
                     if (j - 1 < 0)
                     {
@@ -132,9 +134,9 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
             /// ВТОРОЙ ПРОХОД, КОРРЕКТИРОВКА:
 
-            for (int i = 0; i < inputImage.Height; i++)  // Цикл по пикселям изображения
+            for (int i = 0; i < inputImage.Width; i++)  // Цикл по пикселям изображения
             {
-                for (int j = 0; j < inputImage.Width; j++)
+                for (int j = 0; j < inputImage.Height; j++)
                 {
                     if (image[i, j] != 0)
                     {
@@ -142,15 +144,17 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
                     }
                 }
             }
-            // ВЫВОД МАТРИЦЫ, построенной на изображении
-            for (int i = 0; i < inputImage.Height; i++)  // Цикл по пикселям изображения
-            {
-                for (int j = 0; j < inputImage.Width; j++)
-                {
-                    System.Console.Write("{0} ", image[i,j]);
-                }
-                System.Console.WriteLine(); 
-            }
+            //ВЫВОД МАТРИЦЫ, построенной на изображении
+            //for (int i = 0; i < inputImage.Width; i++)  // Цикл по пикселям изображения
+            //{
+            //    for (int j = 0; j < inputImage.Height; j++)
+            //    {
+            //        Debug.Write($"{image[i, j]} ");
+            //    }
+            //    Debug.WriteLine("");
+            //}
+
+            yield return new FindResult(10, 10, 20, 20);
         }
     }
 }
