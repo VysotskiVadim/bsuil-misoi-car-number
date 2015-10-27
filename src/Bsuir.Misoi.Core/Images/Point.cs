@@ -11,5 +11,10 @@
         public int X { get; }
 
         public int Y { get; }
+
+        public bool IsTheSame(Point point)
+        {
+            return point.X == this.X && point.Y == this.Y;
+        }
     }
 }
