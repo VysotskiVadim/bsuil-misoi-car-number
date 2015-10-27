@@ -1,18 +1,25 @@
-﻿namespace Bsuir.Misoi.Core.Images.Finding.Implementation
+﻿using System;
+using System.Collections.Generic;
+
+namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
     public class FindResult : IFindResult
     {
-        public FindResult(int x, int y, int height, int width)
+        private List<Point> r;
+
+        public FindResult(List<Point> r)
         {
-            this.X = x;
-            this.Y = y;
-            this.Height = height;
-            this.Width = width;
+            this.Points = r;
         }
 
-        public int X { get; }
-        public int Y { get; }
-        public int Height { get; }
-        public int Width { get; }
+        public FindResult(int x, int y, int height, int width)
+        {
+            this.Points.Add(new Point(x, y));
+            this.Points.Add(new Point(x, y + height));
+            this.Points.Add(new Point(x + width, y + height));
+            this.Points.Add(new Point(x + width, y));
+        }
+
+        public IList<Point> Points { get; private set; } = new List<Point>();
     }
 }
