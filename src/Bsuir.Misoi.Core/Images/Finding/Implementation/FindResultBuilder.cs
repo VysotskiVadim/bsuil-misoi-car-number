@@ -23,16 +23,18 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 
         public int GetPerimeter()
         {
+            var jarvis = new JarvisAlgorythm();
+            var points = jarvis.ConvexHull(_points);
             double result = 0;
-            var firstPoint = _points[0];
+            var firstPoint = points[0];
             var previousPoint = firstPoint;
-            for (int i = 1; i < _points.Count; i++)
+            for (int i = 1; i < points.Count; i++)
             {
-                var currentPoint = _points[i];
+                var currentPoint = points[i];
                 result += this.GetDistanceBetweenPoints(previousPoint, currentPoint);
                 previousPoint = currentPoint;
             }
-            var lastPoint = _points[_points.Count - 1];
+            var lastPoint = points[points.Count - 1];
             result += this.GetDistanceBetweenPoints(lastPoint, firstPoint);
             return (int)result;
         }
@@ -41,7 +43,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
         {
             var dx = first.X - second.X;
             var dy = first.Y - second.Y;
-            return Math.Sqrt(dx * dx + dy * dy);
+            return Math.Sqrt((dx * dx) + (dy * dy));
         }
     }
 }

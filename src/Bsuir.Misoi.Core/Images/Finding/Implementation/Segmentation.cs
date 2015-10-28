@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Bsuir.Misoi.Core.Images.Filtering;
 using Bsuir.Misoi.Core.Images.Filtering.Implementation;
 using System;
+using System.Linq;
 
 namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 {
@@ -134,8 +135,8 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
 
 
             // ВТОРОЙ ПРОХОД, КОРРЕКТИРОВКА:
-            int[] squares = new int[20];  
-            int[] perimeters = new int[20];
+            int[] squares = new int[100000];  
+            int[] perimeters = new int[100000];
             int L = 0, R = 0, U = 0, D = 0;
 
             for (int j = 0; j < inputImage.Height; j++)  // цикл по пикселям изображения
@@ -167,17 +168,36 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
             double[] intResults = new double[100000];
             for (int i = 0; i < segment.Length; i++)
             {
-                if (segment[i] != 0)
+                if (segment[i] == i  && squares[i] > 50)
                 {
-                    formFactor = perimeters[i] / (2 * Math.Sqrt(Math.PI * squares[i]));
-                    if ((formFactor > 0.45) && (formFactor < 0.5)) // 520mm X 113mm  form-factor 0,474
+                    FindResultBuilder resultBuilder = new FindResultBuilder();
+                    for (int y = 0; y < inputImage.Height; y++)  // цикл по пикселям изображения
                     {
-                        results[i] = true;
+                        for (int x = 0; x < inputImage.Width; x++)
+                        {
+                            if (image[x, y] == i)
+                            {
+                                resultBuilder.Add(x, y);
+                            }
+                        }
                     }
-                    intResults[i] = formFactor; // тестовый - чтобы посмотреть чё получилось по сегментам
+                    var perimeter = resultBuilder.GetPerimeter();
+                    double b = perimeter / 11.2;
+                    double a = (perimeter / 2.0) - (perimeter / 11.2);
+                    intResults[i] = Math.Abs(((a * b) - squares[i]));
+                    results[i] = Math.Abs(((a * b) - squares[i])) < 5;
+
+                    //formFactor =  (double)squares[i] / perimeter; // 520 * 113 /((520 + 113) * 2)
+                    //if ((formFactor > 5) && (formFactor < 7)) // 520mm X 113mm  form-factor 46,4
+                    //{
+                    //    results[i] = true;
+                    //}
+                    ; // тестовый - чтобы посмотреть чё получилось по сегментам
                 }
             }
 
+            var qqq = intResults.Where(r => r != 0).Min();
+            results[Array.FindIndex(intResults, r => r == qqq)] = true;
 
             // ТУТ НУЖНО НАЙТИ ДАННЫЕ
             for (int x = 0; x < segment.Length; x++)
@@ -185,6 +205,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
                 if (results[x])
                 {
                     FindResultBuilder resultBuilder = new FindResultBuilder();
+                    int count = 0;
                     for (int j = 0; j < inputImage.Height; j++)  // цикл по пикселям изображения
                     {
                         for (int i = 0; i < inputImage.Width; i++)
@@ -192,10 +213,12 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
                             if (image[i, j] == x)
                             {
                                 resultBuilder.Add(i, j);
+                                count++;
                             }
                         }
                     }
-                    yield return resultBuilder.GetResult();
+                    //if (count > 2)
+                        yield return resultBuilder.GetResult();
                 }
             }
             
