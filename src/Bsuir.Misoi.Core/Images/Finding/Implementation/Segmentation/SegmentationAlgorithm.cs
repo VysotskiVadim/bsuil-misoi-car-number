@@ -30,29 +30,23 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
 
             ISegmentManager segmentManager = new SegmentsManager(inputImage.Width, inputImage.Height);
 
-            int segmentNum = 1; // номер нового класса, бинарное изображение или 0 или 1, считанём с 2ух :D
-            bool b = false, c = false, a = false;
 
             for (int y = 0; y < inputImage.Height; y++)  // Цикл по пикселям изображения
             {
                 for (int x = 0; x < inputImage.Width; x++)
                 {
-                    if (x - 1 < 0)
+                    bool b = false, c = false, a = false;
+                    int bx = x - 1;
+                    int cy = y - 1;
+
+                    if (bx >= 0)
                     {
-                        b = false;
-                    }
-                    else
-                    {
-                        b = binaryImage[x - 1, y];
+                        b = binaryImage[bx, y];
                     }
 
-                    if (y - 1 < 0)
+                    if (cy >= 0)
                     {
-                        c = false;
-                    }
-                    else
-                    {
-                        c = binaryImage[x, y - 1];
+                        c = binaryImage[x, cy];
                     }
 
                     a = binaryImage[x, y];
@@ -68,13 +62,13 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                     }
                     else if (b == false && c)
                     {
-                        var cSegment = segmentManager.GetSegmentIdFor(x, y - 1);
+                        var cSegment = segmentManager.GetSegmentIdFor(x, cy);
                         segmentManager.MarkSegment(x, y, cSegment);
                     }
                     else if (b & c)
                     {
-                        var bSegment = segmentManager.GetSegmentIdFor(x - 1, y);
-                        var cSegment = segmentManager.GetSegmentIdFor(x, y - 1);
+                        var bSegment = segmentManager.GetSegmentIdFor(bx, y);
+                        var cSegment = segmentManager.GetSegmentIdFor(x, cy);
                         if (bSegment == cSegment)
                         {           // если сверху и снизу один и тот же класс
                             segmentManager.MarkSegment(x, y, bSegment);
@@ -82,7 +76,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                         else
                         {               // СПОРНАЯ СИТУАЦИЯ! если возникнет конфликт кластеризации - upd: сделаем чтобы А-пиксель отходил так же к сегменту С
                             segmentManager.MergeSegments(bSegment, cSegment);
-                            segmentManager.MarkSegment(x, y, segmentManager.GetSegmentIdFor(x - 1, y));   // т.к. B и С с разных сегментов, но соединяются в A - это всё один сегмент, мерджим B и С сегменты
+                            segmentManager.MarkSegment(x, y, segmentManager.GetSegmentIdFor(bx, y));   // т.к. B и С с разных сегментов, но соединяются в A - это всё один сегмент, мерджим B и С сегменты
                         }
                     }
 
@@ -229,43 +223,13 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
             //    }
             //}
 
-
             return new List<IFindResult>();
-        }
-
-        private void MakeSet(int x) // создание сегмента
-        {
-            segment[x] = x;
-            rank[x] = 0;
-        }
-
-        private int Find(int x)  // главного сегмента в эквивалентных сегментах
-        {
-            return x == segment[x] ? x : segment[x] = Find(segment[x]);
-        }
-
-        private void Union(int firstSergment, int secondSergment)   // merge двух сегментов, образующих конфликт
-        {
-            if ((firstSergment = Find(firstSergment)) == (secondSergment = Find(secondSergment)))
-                return;
-
-            if (rank[firstSergment] < rank[secondSergment])
-                segment[firstSergment] = secondSergment;
-            else
-                segment[secondSergment] = firstSergment;
-
-            if (rank[firstSergment] == rank[secondSergment])
-            {
-                segment[secondSergment] = firstSergment;
-                ++rank[firstSergment];
-            }
         }
 
         private bool PixelToBinary(Pixel pixel)  // перевод RGB пикселя в строго бинарный вид типа int 
         {
             return pixel.B != 0;   // или R!=0 или G != 0  ?)) 
         }
-
 
         private bool[,] ConvertImageToBinaryMatrix(IImage inputImage)  // перевод пиксельного изображения в матричный вид типа int
         {
