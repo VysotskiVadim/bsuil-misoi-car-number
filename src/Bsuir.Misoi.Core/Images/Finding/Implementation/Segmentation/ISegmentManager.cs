@@ -8,7 +8,7 @@
 
         int MarkNewSegment(int x, int y);
 
-        int[,] BuildSegmentMatrix();
+        ISegmentationResult BuildSegmentationResult();
 
         void MergeSegments(int firstSergmentId, int secondSegmentId);
     }

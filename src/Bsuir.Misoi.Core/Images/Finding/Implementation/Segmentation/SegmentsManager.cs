@@ -16,7 +16,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
             _segmentMatrix = new int[xSize, ySize];
         }
 
-        public int[,] BuildSegmentMatrix()
+        public ISegmentationResult BuildSegmentationResult()
         {
             for(int x = 0; x < _segmentMatrix.GetLength(0); x++)
             {
@@ -25,7 +25,16 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                     _segmentMatrix[x, y] = FindSegmentId(_segmentMatrix[x, y]);
                 }
             }
-            return _segmentMatrix;
+
+            foreach (var segment in _segments.Values)
+            {
+                if (segment.MergedWithSegmentId != 0)
+                {
+                    _segments[segment.MergedWithSegmentId].Square += segment.Square;
+                }
+            }
+            var segments = _segments.Values.Where(s => s.MergedWithSegmentId == 0).Cast<ISegment>().ToList();
+            return new SegmentationResult(_segmentMatrix, segments);
         }
 
         public int GetSegmentIdFor(int x, int y)
@@ -44,6 +53,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
         public void MarkSegment(int x, int y, int segmentId)
         {
             _segmentMatrix[x, y] = segmentId;
+            _segments[segmentId].Square++;
         }
 
         public void MergeSegments(int firstSergmentId, int secondSegmentId)

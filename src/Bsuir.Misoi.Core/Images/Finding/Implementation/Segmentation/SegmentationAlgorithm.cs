@@ -83,7 +83,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                 }// for j
             } // for i
 
-            var image = segmentManager.BuildSegmentMatrix();
+            var segments = segmentManager.BuildSegmentationResult();
 
 
             //// ВТОРОЙ ПРОХОД, КОРРЕКТИРОВКА:
@@ -114,6 +114,8 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
             //    }
             //}
 
+
+            var image = segments.SegmentationMatrix;
             for (int j = 0; j < inputImage.Height; j++)
             {
                 for (int i = 0; i < inputImage.Width; i++)
