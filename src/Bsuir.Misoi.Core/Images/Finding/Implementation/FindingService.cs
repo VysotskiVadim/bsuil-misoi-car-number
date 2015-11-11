@@ -25,7 +25,8 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation
         public IImage ApplySelector(string selector, string fileName, Stream fileStram)
         {
             var image = _imageFactory.CreateImage(fileName, fileStram);
-            var selectedAreas = _selectors.Single(f => f.Name == selector).Find(image);
+            var cimage = image.CreateCoppy();
+            var selectedAreas = _selectors.Single(f => f.Name == selector).Find(cimage);
             foreach (var selectedArea in selectedAreas)
             {
                 if (selectedArea.Points.Count > 3)
