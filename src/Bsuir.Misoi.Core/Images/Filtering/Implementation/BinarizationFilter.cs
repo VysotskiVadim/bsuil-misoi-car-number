@@ -13,14 +13,7 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
 
         public void Filter(IImage image)
         {
-            var indencity = new byte[image.Width, image.Height];
-            for (int x = 0; x < image.Width; x++)
-            {
-                for (int y = 0; y < image.Height; y++)
-                {
-                    indencity[x, y] = this.GetIndencity(image, x, y);
-                }
-            }
+            byte[,] indencity = GetIndencityFromImage(image);
 
             for (int x = 0; x < image.Width; x++)
             {
@@ -39,6 +32,20 @@ namespace Bsuir.Misoi.Core.Images.Filtering.Implementation
                     }
                 }
             }
+        }
+
+        private byte[,] GetIndencityFromImage(IImage image)
+        {
+            var indencity = new byte[image.Width, image.Height];
+            for (int x = 0; x < image.Width; x++)
+            {
+                for (int y = 0; y < image.Height; y++)
+                {
+                    indencity[x, y] = this.GetIndencity(image, x, y);
+                }
+            }
+
+            return indencity;
         }
 
         private double GetMiddlePixelArea(int x, int y, IImage image, byte[,] indencities)

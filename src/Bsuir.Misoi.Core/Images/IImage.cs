@@ -2,18 +2,20 @@
 
 namespace Bsuir.Misoi.Core.Images
 {
-	public interface IImage
+    public interface IImage
     {
-		string Name { get; set; }
+        string Name { get; set; }
 
-		Pixel GetPixel(int x, int y);
+        Pixel GetPixel(int x, int y);
 
-		void SetPixel(int x, int y, Pixel pixel);
+        void SetPixel(int x, int y, Pixel pixel);
 
-		void Save(Stream saveStream);
+        void Save(Stream saveStream);
 
-		int Height { get; }
+        int Height { get; }
 
-		int Width { get; }
-	}
+        int Width { get; }
+
+        IImage CreateCoppy();
+    }
 }
