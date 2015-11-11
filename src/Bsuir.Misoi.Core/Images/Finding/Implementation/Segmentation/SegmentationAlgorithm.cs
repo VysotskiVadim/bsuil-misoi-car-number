@@ -82,36 +82,6 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
 
             var segments = segmentManager.BuildSegmentationResult();
 
-
-            //// ВТОРОЙ ПРОХОД, КОРРЕКТИРОВКА:
-            //int[] squares = new int[100000];
-            //int[] perimeters = new int[100000];
-            //int L = 0, R = 0, U = 0, D = 0;
-
-            //for (int y = 0; y < inputImage.Height; y++)  // цикл по пикселям изображения
-            //{
-            //    for (int x = 0; x < inputImage.Width; x++)
-            //    {
-            //        if (binaryImage[x, y] != 0)
-            //        {
-            //            binaryImage[x, y] = Find(binaryImage[x, y]);
-
-            //            squares[binaryImage[x, y]]++;  // инкремент площади сегмента 
-            //                                     // check pixel from
-            //            U = (y - 1 < 0) ? 1 : binaryImage[x, y - 1];   // up
-            //            L = (x - 1 < 0) ? 1 : binaryImage[x - 1, y];   // left
-            //            R = (x + 1 >= 8) ? 1 : binaryImage[x + 1, y];  // right
-            //            D = (y + 1 >= 8) ? 1 : binaryImage[x, y + 1];  // down
-
-            //            if (L == 0 || R == 0 || U == 0 || R == 0)
-            //            {
-            //                perimeters[binaryImage[x, y]]++;  // если в стороне - фон - то пиксель входит в приметр
-            //            }
-            //        }
-            //    }
-            //}
-
-
             var image = segments.SegmentationMatrix;
             for (int j = 0; j < inputImage.Height; j++)
             {
@@ -122,7 +92,6 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                     inputImage.SetPixel(i, j, pixel);
                 }
             }
-
 
             foreach (var segment in segments.Segments.Where(s => s.Square > 50))
             {
@@ -163,115 +132,20 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                 
                 if (Math.Abs(minYInMiddle - minY.Y) / ((double)segmentHeight) < 0.1 && Math.Abs(maxYInMiddle - maxY.Y) / ((double)segmentHeight) < 0.1)
                 {
-
-                    yield return new FindResult(new List<Point> { new Point(minX.X, maxY.Y), new Point(minX.X, minY.Y), new Point(maxX.X, minY.Y), new Point(maxX.X, maxY.Y) });
-
+                    var minXminY = new Point(minX.X, minY.Y);
+                    var maxXminY = new Point(maxX.X, minY.Y);
+                    var minXmaxY = new Point(minX.X, maxY.Y);
+                    var parWidth = Math.Abs(minXminY.X - maxXminY.X);
+                    var parHeight = Math.Abs(minXminY.Y - minXmaxY.Y);
+                    var formFactor = parWidth / (double)parHeight;
+                    if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
+                    {
+                        yield return new FindResult(new List<Point> { minXmaxY, minXminY, maxXminY, new Point(maxX.X, maxY.Y) });
+                    }
                 }
 
                 //yield return new FindResult(new List<Point> { minX, minY, maxY, maxX });
             }
-
-
-
-
-            //int parWidth = 0, parHeight = 0;
-            //// вычисляем форм-фактор для фигуры
-            //double formFactor = 0;
-            //// точки описания 
-            //Point minX = new Point(inputImage.Width, 0);
-            //Point maxX = new Point(0, 0);
-            //Point minY = new Point(0, inputImage.Height);
-            //Point maxY = new Point(0, 0);
-            //// точки пересечения
-            //Point minXminY = new Point(0, 0);
-            //Point minXmaxY = new Point(0, 0);
-            //Point maxXminY = new Point(0, 0);
-            //Point maxXmaxY = new Point(0, 0);
-
-            //bool[] results = new bool[100000];
-            //double[] intResults = new double[100000];
-            //for (int i = 0; i < segment.Length; i++)
-            //{
-            //    if (segment[i] == i && squares[i] > 70)
-            //    {
-            //        minX.X = inputImage.Width;
-            //        maxX.X = 0;
-            //        minY.Y = inputImage.Height;
-            //        maxY.Y = 0;
-
-            //        FindResultBuilder resultBuilder = new FindResultBuilder();
-            //        for (int y = 0; y < inputImage.Height; y++)  // цикл по пикселям изображения
-            //        {
-            //            for (int x = 0; x < inputImage.Width; x++)
-            //            {
-            //                if (image[x, y] == i)
-            //                {
-            //                    if (x <= minX.X) { minX.X = x; minX.Y = y;}  // left
-            //                    if (y <= minY.Y) { minY.X = x; minY.Y = y;  }  // UP
-            //                    if (x >= maxX.X) { maxX.X = x; maxX.Y = y; }  // right
-            //                    if (y >= maxY.Y) { maxY.X = x; maxY.Y = y; }  // down
-            //                    resultBuilder.Add(x, y);
-
-            //                }
-            //            }
-            //        }
-            //        //minXminY minXmaxY  maxYminY  maxXmaxY
-            //        minXminY.X = minX.X; minXminY.Y = minY.Y; // UP -LEFT
-            //        minXmaxY.X = minX.X; minXmaxY.Y = maxY.Y; // DOWN-LEFT 
-            //        maxXminY.X = maxX.X; maxXminY.Y = minY.Y; // UP-RIGHT
-            //        maxXmaxY.X = maxX.X; maxXmaxY.Y = maxY.Y; // DOWN-RIGHT
-
-            //        parWidth =  Math.Abs(minXminY.X - maxXminY.X);
-            //        parHeight = Math.Abs(minXminY.Y - minXmaxY.Y);
-
-            //        //var perimeter = resultBuilder.GetPerimeter();
-            //        //double b = perimeter / 11.2;
-            //        //double a = (perimeter / 2.0) - (perimeter / 11.2);
-            //        //intResults[i] = Math.Abs(((a * b) - squares[i]));
-            //        //results[i] = Math.Abs(((a * b) - squares[i])) < 5;
-
-            //        //formFactor = (double)squares[i] / perimeter; // 520 * 113 /((520 + 113) * 2)
-            //        //if ((formFactor > 5) && (formFactor < 9)) // 520mm X 113mm  form-factor 4,64
-            //        //{
-            //        //    results[i] = true;
-            //        //}
-            //        //formFactor = (double)squares[i] / perimeter; // 520 * 113 /((520 + 113) * 2)
-            //        formFactor =  parWidth / (double)parHeight;
-            //        if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
-            //        {
-            //            results[i] = true;
-
-            //        }
-            //        intResults[i] = formFactor;
-            //        ; // тестовый - чтобы посмотреть чё получилось по сегментам
-            //    }
-            //}
-
-            ////var qqq = intResults.Where(r => r != 0).Min();
-            ////results[Array.FindIndex(intResults, r => r == qqq)] = true;
-
-            //// ТУТ НУЖНО НАЙТИ ДАННЫЕ
-            //for (int x = 0; x < segment.Length; x++)
-            //{
-            //    if (results[x])
-            //    {
-            //        FindResultBuilder resultBuilder = new FindResultBuilder();
-            //        //int count = 0;
-            //        for (int j = 0; j < inputImage.Height; j++)  // цикл по пикселям изображения
-            //        {
-            //            for (int i = 0; i < inputImage.Width; i++)
-            //            {
-            //                if (image[i, j] == x)
-            //                {
-            //                    resultBuilder.Add(i, j);
-            //                    //count++;
-            //                }
-            //            }
-            //        }
-            //        //if (count > 2)
-            //            yield return resultBuilder.GetResult();
-            //    }
-            //}
         }
 
         private IEnumerable<int> GetYsForMiddleX(int[,] image, int middleX, int segmentId)
