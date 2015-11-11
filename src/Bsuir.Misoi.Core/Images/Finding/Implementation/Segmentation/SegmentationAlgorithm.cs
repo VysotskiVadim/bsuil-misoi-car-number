@@ -12,16 +12,13 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
         private readonly IFilter _binarizationFilter;
         public string Name => "Segmentation";
 
-        // данные и 3 метода  для работы с системой непересекающихся множеств
-        private int[] segment = new int[100000]; // массив эквивалентых класов-сегментов
-        private int[] rank = new int[100000]; // ранги эквивалентных классов, в общем-то тут не обязательны
 
         public SegmentationAlgorithm(IFilter binarizationFilter)
         {
             _binarizationFilter = binarizationFilter;
         }
 
-      
+
         public IEnumerable<IFindResult> Find(IImage inputImage)   // конкретно сегментация  работает c бинарной матрицой - быстрее будет, чем работа с пиксельным представлением изображения
         {
             _binarizationFilter.Filter(inputImage);
@@ -55,7 +52,7 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                     {
                         segmentManager.MarkNewSegment(x, y);
                     }
-                    else if (b  && c == false)
+                    else if (b && c == false)
                     {
                         var bSegment = segmentManager.GetSegmentIdFor(x - 1, y);
                         segmentManager.MarkSegment(x, y, bSegment);
@@ -125,6 +122,57 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
                     inputImage.SetPixel(i, j, pixel);
                 }
             }
+
+
+            foreach (var segment in segments.Segments.Where(s => s.Square > 50))
+            {
+                Point minX = new Point(inputImage.Width - 1, 0), maxX = new Point(), maxY = new Point(), minY = new Point(0, inputImage.Height - 1);
+                for (int y = 0; y < inputImage.Height; y++)
+                {
+                    for (int x = 0; x < inputImage.Width; x++)
+                    {
+                        if (image[x, y] == segment.Id)
+                        {
+                            var currentPoint = new Point(x, y);
+                            if (x <= minX.X)
+                            {
+                                minX = currentPoint;
+                            }
+                            else if (x >= maxX.X)
+                            {
+                                maxX = currentPoint;
+                            }
+                            else if (y <= minY.Y)
+                            {
+                                minY = currentPoint;
+                            }
+                            else if (y >= maxY.Y)
+                            {
+                                maxY = currentPoint;
+                            }
+                        }
+                    }
+                }
+
+
+                var middleX = (maxX.X - minX.X) / 2 + minX.X;
+                var minYInMiddle = GetYsForMiddleX(image, middleX, segment.Id).Min();
+                var maxYInMiddle = GetYsForMiddleX(image, middleX, segment.Id).Max();
+
+                int segmentHeight = maxY.Y - minY.Y;
+                
+                if (Math.Abs(minYInMiddle - minY.Y) / ((double)segmentHeight) < 0.1 && Math.Abs(maxYInMiddle - maxY.Y) / ((double)segmentHeight) < 0.1)
+                {
+
+                    yield return new FindResult(new List<Point> { new Point(minX.X, maxY.Y), new Point(minX.X, minY.Y), new Point(maxX.X, minY.Y), new Point(maxX.X, maxY.Y) });
+
+                }
+
+                //yield return new FindResult(new List<Point> { minX, minY, maxY, maxX });
+            }
+
+
+
 
             //int parWidth = 0, parHeight = 0;
             //// вычисляем форм-фактор для фигуры
@@ -224,8 +272,26 @@ namespace Bsuir.Misoi.Core.Images.Finding.Implementation.Segmentation
             //            yield return resultBuilder.GetResult();
             //    }
             //}
+        }
 
-            return new List<IFindResult>();
+        private IEnumerable<int> GetYsForMiddleX(int[,] image, int middleX, int segmentId)
+        {
+            for (int y = 0; y < image.GetLength(1); y++)
+            {
+                if (image[middleX, y] == segmentId)
+                {
+                    yield return y;
+                }
+            }
+        }
+
+        private IEnumerable<int> ForX(int middle, int end)
+        {
+            var final = end - middle;
+            for (int i = -middle; i < final; i++)
+            {
+                yield return i;
+            }
         }
 
         private bool PixelToBinary(Pixel pixel)  // перевод RGB пикселя в строго бинарный вид типа int 
