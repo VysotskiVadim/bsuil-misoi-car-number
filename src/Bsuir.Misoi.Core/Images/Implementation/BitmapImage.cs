@@ -73,7 +73,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             _pixelBuffer[byteOffset + 2] = pixel.R;
         }
 
-        public IImage CreateCoppy()
+        public IImage Clone()
         {
             var image = (BitmapImage)this.MemberwiseClone();
             image._pixelBuffer = (byte[])_pixelBuffer.Clone();

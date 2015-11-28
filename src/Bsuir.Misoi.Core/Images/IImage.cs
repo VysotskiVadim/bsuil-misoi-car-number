@@ -16,6 +16,6 @@ namespace Bsuir.Misoi.Core.Images
 
         int Width { get; }
 
-        IImage CreateCoppy();
+        IImage Clone();
     }
 }

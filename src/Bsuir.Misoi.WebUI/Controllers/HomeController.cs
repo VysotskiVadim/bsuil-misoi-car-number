@@ -2,12 +2,13 @@
 
 namespace Bsuir.Misoi.WebUI.Controllers
 {
+    [Route("")]
     public class HomeController : Controller
     {
         [HttpGet]
-        public string Index()
+        public IActionResult Index()
         {
-            return "Hello from home controller.";
+            return View();
         }
     }
 }
