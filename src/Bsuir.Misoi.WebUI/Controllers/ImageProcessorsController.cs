@@ -1,10 +1,11 @@
-﻿using Bsuir.Misoi.Core.Storage;
-using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Net.Http.Headers;
 using Bsuir.Misoi.Core.Images;
 using System;
 using System.IO;
+using Bsuir.Misoi.WebUI.Storage;
+using Bsuir.Misoi.WebUI.Models.ImageProcessors;
 
 namespace Bsuir.Misoi.WebUI.Controllers
 {
@@ -14,12 +15,18 @@ namespace Bsuir.Misoi.WebUI.Controllers
         private readonly IImageRepository _imageRepository;
         private readonly IImageProcessorsService _imageProcessorService;
         private readonly IImageFactory _imageFactory;
+        private readonly IImageUrlProvider _imageUrlProvider;
 
-        public ImageProcessorsController(IImageRepository imageRepository, IImageProcessorsService imageProcessorService, IImageFactory imageFactory)
+        public ImageProcessorsController(
+            IImageRepository imageRepository, 
+            IImageProcessorsService imageProcessorService, 
+            IImageFactory imageFactory,
+            IImageUrlProvider imageUrlProvider)
         {
             _imageRepository = imageRepository;
             _imageProcessorService = imageProcessorService;
             _imageFactory = imageFactory;
+            _imageUrlProvider = imageUrlProvider;
         }
 
         [Route("")]
@@ -32,8 +39,9 @@ namespace Bsuir.Misoi.WebUI.Controllers
 
         [Route("")]
         [HttpPost]
-        public string ProcessImage(IFormFile file, string processorName)
+        public ImageProcessorsResult ProcessImage(IFormFile file, string processorName)
         {
+            var result = new ImageProcessorsResult();
             var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Replace("\"", string.Empty);
             using (var fileStram = file.OpenReadStream())
             {
@@ -41,12 +49,14 @@ namespace Bsuir.Misoi.WebUI.Controllers
                 var processResult = _imageProcessorService.ProcessImageAsync(processorName, image).Result;
                 if (processResult.Successful)
                 {
-                    var processedImage = processResult.ProcessedImage;
-                    processedImage.Name = Guid.NewGuid() + Path.GetExtension(processedImage.Name);
-                    _imageRepository.SaveImageAsync(processedImage).Wait();
-                    return "/image/" + processedImage.Name;
+                    processResult.ProcessedImage.Name = Guid.NewGuid() + Path.GetExtension(processResult.ProcessedImage.Name);
+                    _imageRepository.SaveImageAsync(processResult.ProcessedImage).Wait();
+                    result.ProcessedImageUrl = _imageUrlProvider.GetImageUrl(processResult.ProcessedImage.Name);
+                    processResult.SourceImage.Name = Guid.NewGuid() + Path.GetExtension(processResult.SourceImage.Name);
+                    _imageRepository.SaveImageAsync(processResult.SourceImage).Wait();
+                    result.SourceImageUrl = _imageUrlProvider.GetImageUrl(processResult.SourceImage.Name);
                 }
-                return string.Empty;
+                return result;
             }
         }
     }

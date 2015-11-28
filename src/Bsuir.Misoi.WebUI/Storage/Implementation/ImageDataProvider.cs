@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Bsuir.Misoi.Core.Storage;
 using Microsoft.Dnx.Runtime;
 using System.Collections.Generic;
 
-namespace Bsuir.Misoi.WebUI.HostingFileSystem
+namespace Bsuir.Misoi.WebUI.Storage.Implementation
 {
     public class ImageDataProvider : IImageDataProvider
     {

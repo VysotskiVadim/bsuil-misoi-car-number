@@ -1,8 +1,7 @@
 ﻿using Bsuir.Misoi.Core.Images;
 using Bsuir.Misoi.Core.Images.Implementation;
-using Bsuir.Misoi.Core.Storage;
-using Bsuir.Misoi.Core.Storage.Implementation;
-using Bsuir.Misoi.WebUI.HostingFileSystem;
+using Bsuir.Misoi.WebUI.Storage;
+using Bsuir.Misoi.WebUI.Storage.Implementation;
 using Microsoft.Framework.DependencyInjection;
 
 namespace Bsuir.Misoi.WebUI
@@ -17,7 +16,7 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<IImageDataProvider, ImageDataProvider>();
             services.AddTransient<IBinarizationFilter, BinarizationFilter>();
             services.AddTransient<IImageProcessorsService, ImageProcessorsService>();
-            
+            services.AddTransient<IImageUrlProvider, ImageUrlProvider>();
         }
     }
 }

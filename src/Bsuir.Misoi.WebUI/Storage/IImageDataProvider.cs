@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Bsuir.Misoi.Core.Storage
+namespace Bsuir.Misoi.WebUI.Storage
 {
     public interface IImageDataProvider
     {

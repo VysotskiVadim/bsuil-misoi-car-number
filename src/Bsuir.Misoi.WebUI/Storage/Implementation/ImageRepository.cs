@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bsuir.Misoi.Core.Images;
-using Bsuir.Misoi.Core.Images.Implementation;
 
-namespace Bsuir.Misoi.Core.Storage.Implementation
+namespace Bsuir.Misoi.WebUI.Storage.Implementation
 {
     public class ImageRepository : IImageRepository
     {

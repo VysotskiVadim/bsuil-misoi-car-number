@@ -1,4 +1,4 @@
-﻿using Bsuir.Misoi.Core.Storage;
+﻿using Bsuir.Misoi.WebUI.Storage;
 using Microsoft.AspNet.Mvc;
 
 namespace Bsuir.Misoi.WebUI.Controllers
