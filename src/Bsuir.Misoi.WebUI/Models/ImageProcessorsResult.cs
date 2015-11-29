@@ -1,4 +1,4 @@
-﻿namespace Bsuir.Misoi.WebUI.Models.ImageProcessors
+﻿namespace Bsuir.Misoi.WebUI.Models
 {
     public class ImageProcessorsResult
     {

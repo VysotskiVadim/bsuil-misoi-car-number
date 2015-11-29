@@ -8,12 +8,14 @@ namespace Bsuir.Misoi.Core.Images.Implementation
     public class ImageProcessorsService : IImageProcessorsService
     {
         private readonly IConvolutionFilter _convolutionFilter;
+        private readonly ISegmentationAlgorithm _segmentationAlogithm;
 
         private readonly List<IImageProcessor> _processors;
 
-        public ImageProcessorsService(IConvolutionFilter convolutionFilter)
+        public ImageProcessorsService(IConvolutionFilter convolutionFilter, ISegmentationAlgorithm segmentationAlogithm)
         {
             _convolutionFilter = convolutionFilter;
+            _segmentationAlogithm = segmentationAlogithm;
             _processors = new List<IImageProcessor>(RegiterProcessors());
         }
 
@@ -56,6 +58,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             yield return new GammaFilter();
             yield return new LaplacianFiveFilter(_convolutionFilter);
             yield return new MedianFilter();
+            yield return new SegmentationFilter(_segmentationAlogithm);
         }
     }
 }

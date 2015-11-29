@@ -2,6 +2,6 @@
 {
     public interface ISegmentationAlgorithm
     {
-        ISegmentationResult ProcessImage();
+        ISegmentationResult ProcessImage(IImage image);
     }
 }

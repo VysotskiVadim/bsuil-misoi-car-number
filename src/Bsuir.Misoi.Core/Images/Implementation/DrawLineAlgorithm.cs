@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bsuir.Misoi.Core.Images.Finding.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation
 {
     internal class DrawLineAlgorithm
     {

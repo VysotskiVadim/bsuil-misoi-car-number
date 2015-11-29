@@ -5,7 +5,7 @@ using Bsuir.Misoi.Core.Images;
 using System;
 using System.IO;
 using Bsuir.Misoi.WebUI.Storage;
-using Bsuir.Misoi.WebUI.Models.ImageProcessors;
+using Bsuir.Misoi.WebUI.Models;
 
 namespace Bsuir.Misoi.WebUI.Controllers
 {
