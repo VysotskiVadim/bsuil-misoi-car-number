@@ -1,4 +1,5 @@
-﻿using Bsuir.Misoi.WebUI.Storage;
+﻿using System.IO;
+using Bsuir.Misoi.WebUI.Storage;
 using Microsoft.AspNet.Mvc;
 
 namespace Bsuir.Misoi.WebUI.Controllers
@@ -17,7 +18,7 @@ namespace Bsuir.Misoi.WebUI.Controllers
         public IActionResult GetImage(string name)
         {
             var image = _imageDataProvider.GetImage(name);
-            return File(image, "img/jpeg");
+            return File(image, "img/" + Path.GetExtension(name).Substring(1));
         }
     }
 }

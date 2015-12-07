@@ -53,13 +53,17 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
             var extension = Path.GetExtension(this.Name);
             ImageFormat imageFormat;
-            if (extension == "png")
+            if (extension == ".png")
             {
                 imageFormat = ImageFormat.Png;
             }
-            else
+            else if (extension == ".jpg" || extension == ".jpeg")
             {
                 imageFormat = ImageFormat.Jpeg;
+            }
+            else
+            {
+                 throw new NotSupportedException("unsupported image format");
             }
             resultBitmap.Save(saveStream, imageFormat);
             resultBitmap.Dispose();
