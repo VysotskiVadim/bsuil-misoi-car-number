@@ -16,9 +16,9 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             _findResultDrawer = findResultDrawer;
         }
 
-        public Task<ICanNumberResult> IdentifyAsync(IImage inputImage)
+        public Task<ICarNumberIdentifyResult> IdentifyAsync(IImage inputImage)
         {
-            var result = new IdentifyResult();
+            var result = new IdentifyIdentifyResult();
 
             var imageClone = inputImage.Clone();
             var segments = _segmentationAlgoritm.ProcessImage(imageClone);
@@ -28,7 +28,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             _findResultDrawer.DrawFindResults(inputImage, selectedAreas);
             result.ProcessedImage = inputImage;
 
-            return Task.FromResult((ICanNumberResult)result);
+            return Task.FromResult((ICarNumberIdentifyResult)result);
         }
 
         private IEnumerable<IFindResult> Identify(ISegmentationResult segmantationResult, IImage inputImage)
