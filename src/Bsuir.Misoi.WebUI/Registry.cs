@@ -20,6 +20,7 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<IImageUrlProvider, ImageUrlProvider>();
             services.AddTransient<ISegmentationAlgorithm, SegmentationAlgorithm>();
             services.AddTransient<ICarNumerIdentifyService, CarNumnerIdentifyService>();
+            services.AddTransient<IFindResultDrawer, FindResultDrawer>();
         }
     }
 }

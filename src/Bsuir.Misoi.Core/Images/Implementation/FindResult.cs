@@ -5,8 +5,6 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class FindResult : IFindResult
     {
-        private List<Point> r;
-
         public FindResult(List<Point> r)
         {
             this.Points = r;
@@ -20,6 +18,6 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             this.Points.Add(new Point(x + width, y));
         }
 
-        public IList<Point> Points { get; private set; } = new List<Point>();
+        public IList<Point> Points { get; } = new List<Point>();
     }
 }

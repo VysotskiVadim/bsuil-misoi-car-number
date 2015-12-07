@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images
 {
     public interface IFindResult
     {
