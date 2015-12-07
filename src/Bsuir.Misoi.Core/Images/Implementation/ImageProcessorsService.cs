@@ -9,13 +9,15 @@ namespace Bsuir.Misoi.Core.Images.Implementation
     {
         private readonly IConvolutionFilter _convolutionFilter;
         private readonly ISegmentationAlgorithm _segmentationAlogithm;
+        private readonly IFindResultDrawer _findResultDrawer;
 
         private readonly List<IImageProcessor> _processors;
 
-        public ImageProcessorsService(IConvolutionFilter convolutionFilter, ISegmentationAlgorithm segmentationAlogithm)
+        public ImageProcessorsService(IConvolutionFilter convolutionFilter, ISegmentationAlgorithm segmentationAlogithm, IFindResultDrawer findResultDrawer)
         {
             _convolutionFilter = convolutionFilter;
             _segmentationAlogithm = segmentationAlogithm;
+            _findResultDrawer = findResultDrawer;
             _processors = new List<IImageProcessor>(RegiterProcessors());
         }
 
@@ -59,6 +61,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             yield return new LaplacianFiveFilter(_convolutionFilter);
             yield return new MedianFilter();
             yield return new SegmentationFilter(_segmentationAlogithm);
+            yield return new SelectFoundedAreaImageProcessor(new TextFindProcessor(), _findResultDrawer);
         }
     }
 }
