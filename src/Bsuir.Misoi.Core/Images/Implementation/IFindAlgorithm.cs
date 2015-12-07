@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bsuir.Misoi.Core.Images.Finding
+namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public interface IFindAlgorithm
     {
