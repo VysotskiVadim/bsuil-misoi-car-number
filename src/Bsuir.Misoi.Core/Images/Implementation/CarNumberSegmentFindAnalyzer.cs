@@ -6,6 +6,8 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class CarNumberSegmentFindAnalyzer : ISegmentFindAnalyzer
     {
+        public string Name => "Find car number";
+
         public IEnumerable<IFindResult> Find(ISegmentationResult segmantationResult)
         {
             var image = segmantationResult.SegmentationMatrix;

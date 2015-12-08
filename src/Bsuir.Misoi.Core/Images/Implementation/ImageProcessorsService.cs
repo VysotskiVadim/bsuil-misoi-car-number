@@ -63,6 +63,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             yield return new MedianFilter();
             yield return new SegmentationFilter(_segmentationAlogithm);
             yield return new SelectFoundedAreaImageProcessor(new TextFindProcessor(), _findResultDrawer);
+            yield return new SelectFounedAreaAfterSegmentationImageProcessor(_findResultDrawer, _segmentationAlogithm, new CarNumberSegmentFindAnalyzer());
         }
     }
 }
