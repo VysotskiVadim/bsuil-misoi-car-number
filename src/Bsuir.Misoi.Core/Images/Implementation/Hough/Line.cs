@@ -2,7 +2,7 @@
 
 namespace Bsuir.Misoi.Core.Images.Implementation.Hough
 {
-    struct Line
+    public struct Line
     {
         public Line(int f, int r)
         {

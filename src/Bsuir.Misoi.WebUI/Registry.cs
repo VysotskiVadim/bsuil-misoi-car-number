@@ -1,5 +1,6 @@
 ﻿using Bsuir.Misoi.Core.Images;
 using Bsuir.Misoi.Core.Images.Implementation;
+using Bsuir.Misoi.Core.Images.Implementation.Hough;
 using Bsuir.Misoi.Core.Images.Implementation.Segmentation;
 using Bsuir.Misoi.WebUI.Storage;
 using Bsuir.Misoi.WebUI.Storage.Implementation;
@@ -22,6 +23,7 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<ICarNumerIdentifyService, CarNumnerIdentifyService>();
             services.AddTransient<IFindResultDrawer, FindResultDrawer>();
             services.AddTransient<ISegmentFindAnalyzer, CarNumberSegmentFindAnalyzer>();
+            services.AddTransient<IHoughConversion, HoughConversion>();
         }
     }
 }
