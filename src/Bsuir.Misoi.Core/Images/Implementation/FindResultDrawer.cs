@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bsuir.Misoi.Core.Images.Implementation
 {
@@ -10,11 +11,19 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             {
                 if (selectedArea.Points.Count >= 2)
                 {
+                    var rand = new Random();
+                    var pixel = new Pixel
+                    {
+                        R = (byte) rand.Next(255),
+                        G = (byte) rand.Next(255),
+                        B = (byte) rand.Next(255)
+                    };
                     DrawLineAlgorithm.PlotFunction plotFunction = (x, y) =>
                     {
+                        
                         if (x < image.Width && y < image.Height && x >= 0 && y >= 0)
                         {
-                            image.SetPixel(x, y, new Pixel {R = 255, G = 0, B = 0});
+                            image.SetPixel(x, y, pixel);
                         }
                         return true;
                     };

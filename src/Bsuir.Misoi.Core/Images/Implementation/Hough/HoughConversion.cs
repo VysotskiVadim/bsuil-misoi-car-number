@@ -53,58 +53,5 @@ namespace Bsuir.Misoi.Core.Images.Implementation.Hough
 
             return lines;
         }
-
-
-        private const int _maximumsCount = 4;
-
-        //private IList<Line> IsMaximum(int[,] values)
-        //{
-        //    int width = values.GetLength(0);
-        //    int height = values.GetLength(1);
-        //    List<Line> maximums = new List<Line>(_maximumsCount);
-        //    for (int f = 0; f < width; f++)
-        //    {
-        //        for (int r = 0; r < height; r++)
-        //        {
-        //            if (values[f, r] > 15)
-        //            {
-        //                if (maximums.Count <= _maximumsCount)
-        //                {
-        //                    maximums.Add(new Line(f, r));
-        //                }
-        //                else
-        //                {
-        //                    int? theLoweresIndex = null;
-        //                    for (int i = 0; i < maximums.Count; i++)
-        //                    {
-        //                        var oneOfMax = maximums[i];
-        //                        if (values[f, r] > values[oneOfMax.F, oneOfMax.R])
-        //                        {
-        //                            if (theLoweresIndex == null)
-        //                            {
-        //                                theLoweresIndex = i;
-        //                            }
-        //                            else
-        //                            {
-        //                                var currentTheLoverst = maximums[theLoweresIndex.Value];
-        //                                if (values[currentTheLoverst.F, currentTheLoverst.R] >
-        //                                    values[oneOfMax.F, oneOfMax.R])
-        //                                {
-        //                                    theLoweresIndex = i;
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                    if (theLoweresIndex != null)
-        //                    {
-        //                        maximums[theLoweresIndex.Value] = new Line(f, r);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return maximums;
-        //}
     }
 }

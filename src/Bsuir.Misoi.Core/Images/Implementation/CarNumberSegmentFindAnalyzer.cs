@@ -69,54 +69,41 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             }
         }
 
-        private readonly int _coordintatesDifference = 15;
         private readonly int _angleDifference = 5;
 
         private IList<Line> FilterLines(IList<Line> lines)
         {
             var result = new List<Line>();
-            
+
             foreach (var line in lines)
             {
-                bool foundParellel = false;
-                bool foundFirstPerpendicular = false;
-                Line firstPerpendicular = new Line();
-                bool foundSecondPerpendicular = false;
                 result.Clear();
                 result.Add(line);
 
-                foreach (var testedLine in lines)
-                {
-                    if (foundParellel == false)
-                    {
-                        if (Math.Abs((line.F - testedLine.F)%180) < _angleDifference && Math.Abs(line.R - testedLine.R) > _coordintatesDifference)
-                        {
-                            foundParellel = true;
-                            result.Add(testedLine);
-                        }
-                    }
-                    if (foundFirstPerpendicular == false)
-                    {
-                        if (Math.Abs(((line.F - testedLine.F) % 180) - 90) < _angleDifference)
-                        {
-                            foundFirstPerpendicular = true;
-                            result.Add(testedLine);
-                            firstPerpendicular = testedLine;
-                        }
-                    }
-                    if (foundFirstPerpendicular && foundSecondPerpendicular == false)
-                    {
-                        if (Math.Abs(((line.F - testedLine.F) % 180) - 90) < _angleDifference && Math.Abs(firstPerpendicular.R - testedLine.R) > _coordintatesDifference)
-                        {
-                            result.Add(testedLine);
-                            foundSecondPerpendicular = true;
-                        }
-                    }
+                var parallelLines = lines.Where(l =>
+                    Math.Abs((line.F - l.F)%180) < _angleDifference)
+                    .OrderByDescending(l => Math.Abs(line.R - l.R));
 
-                    if (result.Count == 4)
-                    {
-                        break;
-                    }
+                if (parallelLines.Any())
+                {
+                    result.Add(parallelLines.First());
+                }
+                else
+                {
+                    continue;
+                }
+
+                var perpendicularLines = lines.Where(l => Math.Abs((line.F - l.F) % 180 - 90) < _angleDifference)
+                    .OrderByDescending(l => l.R).ToList();
+
+                if (perpendicularLines.Count >= 2)
+                {
+                    result.Add(perpendicularLines[0]);
+                    result.Add(perpendicularLines[perpendicularLines.Count - 1]);
+                }
+                else
+                {
+                    continue;
                 }
 
                 if (result.Count == 4)
