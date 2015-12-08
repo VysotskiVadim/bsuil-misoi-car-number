@@ -8,11 +8,14 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         {
             foreach (var selectedArea in results)
             {
-                if (selectedArea.Points.Count > 3)
+                if (selectedArea.Points.Count >= 2)
                 {
                     DrawLineAlgorithm.PlotFunction plotFunction = (x, y) =>
                     {
-                        image.SetPixel(x, y, new Pixel { R = 255, G = 0, B = 0 });
+                        if (x < image.Width && y < image.Height && x >= 0 && y >= 0)
+                        {
+                            image.SetPixel(x, y, new Pixel {R = 255, G = 0, B = 0});
+                        }
                         return true;
                     };
                     var firstPoint = selectedArea.Points[0];
@@ -23,8 +26,11 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                         DrawLineAlgorithm.Line(previousPoint.X, previousPoint.Y, currentPoint.X, currentPoint.Y, plotFunction);
                         previousPoint = currentPoint;
                     }
-                    var lastPoint = selectedArea.Points[selectedArea.Points.Count - 1];
-                    DrawLineAlgorithm.Line(lastPoint.X, lastPoint.Y, firstPoint.X, firstPoint.Y, plotFunction);
+                    if (selectedArea.Points.Count > 2)
+                    {
+                        var lastPoint = selectedArea.Points[selectedArea.Points.Count - 1];
+                        DrawLineAlgorithm.Line(lastPoint.X, lastPoint.Y, firstPoint.X, firstPoint.Y, plotFunction);
+                    }
                 }
             }
         }
