@@ -21,6 +21,7 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<ISegmentationAlgorithm, SegmentationAlgorithm>();
             services.AddTransient<ICarNumerIdentifyService, CarNumnerIdentifyService>();
             services.AddTransient<IFindResultDrawer, FindResultDrawer>();
+            services.AddTransient<ISegmentFindAnalyzer, CarNumberSegmentFindAnalyzer>();
         }
     }
 }
