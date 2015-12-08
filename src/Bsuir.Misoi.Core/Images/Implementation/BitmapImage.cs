@@ -81,6 +81,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         {
             var image = (BitmapImage)this.MemberwiseClone();
             image._pixelBuffer = (byte[])_pixelBuffer.Clone();
+            image.Name = Guid.NewGuid() + Path.GetExtension(Name);
             return image;
         }
     }

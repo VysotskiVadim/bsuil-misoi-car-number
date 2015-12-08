@@ -18,8 +18,8 @@ namespace Bsuir.Misoi.WebUI.Controllers
         private readonly IImageUrlProvider _imageUrlProvider;
 
         public ImageProcessorsController(
-            IImageRepository imageRepository, 
-            IImageProcessorsService imageProcessorService, 
+            IImageRepository imageRepository,
+            IImageProcessorsService imageProcessorService,
             IImageFactory imageFactory,
             IImageUrlProvider imageUrlProvider)
         {
@@ -39,25 +39,26 @@ namespace Bsuir.Misoi.WebUI.Controllers
 
         [Route("")]
         [HttpPost]
-        public ImageProcessorsResult ProcessImage(IFormFile file, string processorName)
+        public ImageProcessorsResult ProcessImage(string processorName, string imageName) // We do all async operation sync because of easy exception handline, this controller only for developers.
         {
             var result = new ImageProcessorsResult();
-            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Replace("\"", string.Empty);
-            using (var fileStram = file.OpenReadStream())
+            var sourceImage = _imageRepository.GetImageAsync(imageName).Result; 
+            var processResult = _imageProcessorService.ProcessImageAsync(processorName, sourceImage).Result;
+            if (processResult.Successful)
             {
-                var image = _imageFactory.CreateImage(fileName, fileStram);
-                var processResult = _imageProcessorService.ProcessImageAsync(processorName, image).Result;
-                if (processResult.Successful)
-                {
-                    processResult.ProcessedImage.Name = Guid.NewGuid() + Path.GetExtension(processResult.ProcessedImage.Name);
-                    _imageRepository.SaveImageAsync(processResult.ProcessedImage).Wait();
-                    result.ProcessedImageUrl = _imageUrlProvider.GetImageUrl(processResult.ProcessedImage.Name);
-                    processResult.SourceImage.Name = Guid.NewGuid() + Path.GetExtension(processResult.SourceImage.Name);
-                    _imageRepository.SaveImageAsync(processResult.SourceImage).Wait();
-                    result.SourceImageUrl = _imageUrlProvider.GetImageUrl(processResult.SourceImage.Name);
-                }
-                return result;
+                result.Successful = true;
+                _imageRepository.SaveImageAsync(processResult.ProcessedImage).Wait();
+                result.ProcessedImageUrl = _imageUrlProvider.GetImageUrl(processResult.ProcessedImage.Name);
+                result.ProcessedImageName = processResult.ProcessedImage.Name;
+                result.SourceImageUrl = _imageUrlProvider.GetImageUrl(sourceImage.Name);
+                result.SourceImageName = sourceImage.Name;
             }
+            else
+            {
+                result.Successful = false;
+            }
+            return result;
         }
     }
 }
+

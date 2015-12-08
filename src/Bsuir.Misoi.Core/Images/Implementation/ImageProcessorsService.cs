@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,9 +35,9 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             {
                 try
                 {
-                    result.SourceImage = image.Clone();
-                    processor.ProcessImage(image);
-                    result.ProcessedImage = image;
+                    var imageForProcessing = image.Clone();
+                    processor.ProcessImage(imageForProcessing);
+                    result.ProcessedImage = imageForProcessing;
                     result.Successful = true;
                 }
                 catch (Exception e)

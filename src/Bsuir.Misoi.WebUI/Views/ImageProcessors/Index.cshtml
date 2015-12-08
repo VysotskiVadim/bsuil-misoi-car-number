@@ -8,19 +8,43 @@
 
     <script type="text/javascript">
         function submitForm() {
-            console.log("submit event");
-            var fd = new FormData(document.getElementById("imageUploadForm"));
-            fd.append("label", "WEBUPLOAD");
+            var filterName = $("input[name='processorName']:checked:enabled", '#selectFilterForm').attr('value');
+            var userProcessedImage = $("#usePrevious", '#selectFilterForm').is(':checked');
+
+            var processedImage = $("#result").attr('data-name');
+            var sourceImage = $("#source").attr('data-name');
+
+            var imageName;
+            if (userProcessedImage && processedImage !== '') {
+                imageName = processedImage;
+            } else {
+                imageName = sourceImage;
+            }
             $.ajax({
                 url: "",
+                type: "POST",
+                data: { imageName: imageName, processorName: filterName }
+            }).done(function (data) {
+                $("#result").html("<img src=\"" + data.ProcessedImageUrl + "\">").attr('data-name', data.ProcessedImageName);
+                $("#source").html("<img src=\"" + data.SourceImageUrl + "\">").attr('data-name', data.SourceImageName);
+            });
+            return false;
+        }
+
+        function submitImage() {
+            var fd = new FormData(document.getElementById("imgeUploadForm"));
+            fd.append("label", "WEBUPLOAD");
+            $.ajax({
+                url: "image/upload",
                 type: "POST",
                 data: fd,
                 enctype: 'multipart/form-data',
                 processData: false,  // tell jQuery not to process the data
                 contentType: false   // tell jQuery not to set contentType
             }).done(function (data) {
-                var resultContainer = document.getElementById("result");
-                $(resultContainer).html("<div><img src=\"" + data.SourceImageUrl + "\"></div>" + "<div><img src=\"" + data.ProcessedImageUrl + "\"></div>");
+                $("#source").html("<img src=\"" + data.Url + "\">");
+                $("#selectFilterForm").attr('style', '');
+                $("#source").attr('data-name', data.Name);
             });
             return false;
         }
@@ -28,16 +52,34 @@
 </head>
 
 <body>
-    <form method="post" id="imageUploadForm" name="fileinfo" onsubmit="return submitForm();">
-        <label>Select an image:</label><br />
+    <form method="post" id="imgeUploadForm" onsubmit="return submitImage();">
+        <label>Upload an image before processing:</label><br />
+        <input type="file" name="file" required />
+        <input type="submit" value="Upload" />
+    </form>
+
+    <form method="post" id="selectFilterForm" style="visibility: hidden" name="fileinfo" onsubmit="return submitForm();">
+        <label>Select filter:</label><br />
+        @{ bool isFirst = true; }
         @foreach (var item in Model)
         {
-            <input type="radio" name="processorName" value="@item">@item<br>
+            if (isFirst)
+            {
+                <input type="radio" checked="checked" name="processorName" value="@item">
+                @item<br>
+                isFirst = false;
+            }
+            else
+            {
+                <input type="radio" name="processorName" value="@item">
+                @item<br>
+            }
         }
-        <label>Select a file:</label><br>
-        <input type="file" name="file" required />
+        <label><input id="usePrevious" type="checkbox" /> Use previous processed image</label>
+        <input type="hidden" id="imageName" name="imageName" />
         <input type="submit" value="Filter" />
     </form>
-    <div id="result"></div>
+    <div id="result" data-name=""></div>
+    <div id="source" data-name=""></div>
 </body>
 </html>

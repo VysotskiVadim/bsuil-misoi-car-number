@@ -6,6 +6,5 @@
         string ErrorMessage { get; }
         string Logs { get; }
         IImage ProcessedImage { get; }
-        IImage SourceImage { get; }
     }
 }
