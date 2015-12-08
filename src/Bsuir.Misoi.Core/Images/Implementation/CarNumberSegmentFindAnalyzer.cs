@@ -43,25 +43,18 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                     }
                 }
 
-                var middleX = (maxX.X - minX.X) / 2 + minX.X;
-                var minYInMiddle = GetYsForMiddleX(image, middleX, segment.Id).Min();
-                var maxYInMiddle = GetYsForMiddleX(image, middleX, segment.Id).Max();
-
-                int segmentHeight = maxY.Y - minY.Y;
-
-                if (Math.Abs(minYInMiddle - minY.Y) / ((double)segmentHeight) < 0.1 && Math.Abs(maxYInMiddle - maxY.Y) / ((double)segmentHeight) < 0.1)
+                var minXminY = new Point(minX.X, minY.Y);
+                var maxXminY = new Point(maxX.X, minY.Y);
+                var minXmaxY = new Point(minX.X, maxY.Y);
+                var parWidth = Math.Abs(minXminY.X - maxXminY.X);
+                var parHeight = Math.Abs(minXminY.Y - minXmaxY.Y);
+                var formFactor = parWidth / (double)parHeight;
+               // if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
+                if ((formFactor > 3) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
                 {
-                    var minXminY = new Point(minX.X, minY.Y);
-                    var maxXminY = new Point(maxX.X, minY.Y);
-                    var minXmaxY = new Point(minX.X, maxY.Y);
-                    var parWidth = Math.Abs(minXminY.X - maxXminY.X);
-                    var parHeight = Math.Abs(minXminY.Y - minXmaxY.Y);
-                    var formFactor = parWidth / (double)parHeight;
-                    if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
-                    {
-                        yield return new FindResult(new List<Point> { minXmaxY, minXminY, maxXminY, new Point(maxX.X, maxY.Y) });
-                    }
+                    yield return new FindResult(new List<Point> { minXmaxY, minXminY, maxXminY, new Point(maxX.X, maxY.Y) });
                 }
+
             }
         }
 
