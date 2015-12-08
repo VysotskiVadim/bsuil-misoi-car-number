@@ -60,7 +60,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                     var hough = new HoughConversion();
                     double imageDiagonal = new Point(0, 0).Distanse(new Point(width, height));
                     IList<Line> lines = hough.AccumulateLines(points, imageDiagonal);
-                    //lines = this.FilterLines(lines);
+                    lines = this.FilterLines(lines);
                     foreach (var result in DrawLines(lines, width, height))
                     {
                         yield return result;

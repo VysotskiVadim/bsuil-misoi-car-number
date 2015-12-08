@@ -47,7 +47,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
         private double GetMiddlePixelArea(int x, int y, IImage image, byte[,] indencities)
         {
-            var radius = 13;
+            var radius = 5;
 
             var left = (x - radius < 0) ? 0 : x - radius;
             var top = (y - radius < 0) ? 0 : y - radius;
