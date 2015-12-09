@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using Bsuir.Misoi.Core.Images.Implementation.Hough;
@@ -7,7 +8,17 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class CarNumberSegmentFindAnalyzer : ISegmentFindAnalyzer
     {
-        public string Name => "Find car number";
+        public CarNumberSegmentFindAnalyzer(string name)
+        {
+            Name = name;
+        }
+
+        public CarNumberSegmentFindAnalyzer()
+        {
+            Name = "Find car number";
+        }
+
+        public string Name { get; }
 
         public IEnumerable<IFindResult> Find(ISegmentationResult segmantationResult)
         {
@@ -61,12 +72,24 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                     double imageDiagonal = new Point(0, 0).Distanse(new Point(width, height));
                     IList<Line> lines = hough.AccumulateLines(points, imageDiagonal);
                     lines = this.FilterLines(lines);
-                    foreach (var result in DrawLines(lines, width, height))
+                    if (lines.Count != 0)
                     {
-                        yield return result;
+                        yield return PrepareResult(lines);
                     }
                 }
             }
+        }
+
+        private Point FindCrossing(Line first, Line second)
+        {
+            double a = first.R + second.R;
+            double b = Math.Sin(first.FRad) + Math.Sin(second.FRad);
+            double c = Math.Cos(first.FRad) + Math.Cos(second.FRad);
+
+            double x = (first.R*(b - 1) + second.R)/(Math.Cos(first.FRad)*b - Math.Sin(first.FRad)*c);
+            double y = (a - x * c) / b;
+
+            return new Point((int)Math.Round(x), (int)Math.Round(y));
         }
 
         private readonly int _angleDifference = 5;
@@ -120,34 +143,15 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             return result;
         }
 
-        private IEnumerable<IFindResult> DrawLines(IList<Line> lines, int width, int height)
+        private IFindResult PrepareResult(IList<Line> lines)
         {
-            double x1;
-            double y1;
-            double x2;
-            double y2;
+            lines = lines.OrderBy(l => l.F).ToList();
+            var first = FindCrossing(lines[0], lines[2]);
+            var second = FindCrossing(lines[0], lines[3]);
+            var third = FindCrossing(lines[1], lines[2]);
+            var fourth = FindCrossing(lines[1], lines[3]);
 
-            foreach (var line in lines)
-            {
-                if (line.F != 0)
-
-                {
-                    x1 = 0;
-                    y1 = (-Math.Cos(line.FRad) / Math.Sin(line.FRad)) * x1 + (line.R / Math.Sin(line.FRad));
-                    x2 = width - 1;
-                    y2 = (-Math.Cos(line.FRad) / Math.Sin(line.FRad)) * x2 + (line.R / Math.Sin(line.FRad));
-
-                }
-                else
-                {
-                    x1 = line.R;
-                    y1 = 0;
-                    x2 = line.R;
-                    y2 = height;
-                }
-
-                yield return new FindResult(new List<Point> { new Point((int)x1, (int)y1), new Point((int)x2, (int)y2)});
-            }
+             return new FindResult(new List<Point> { first, second, third, fourth }, (float)lines[1].F);
         }
     }
 }

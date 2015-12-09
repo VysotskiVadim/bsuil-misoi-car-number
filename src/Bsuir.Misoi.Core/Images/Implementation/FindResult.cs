@@ -5,9 +5,10 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class FindResult : IFindResult
     {
-        public FindResult(List<Point> r)
+        public FindResult(List<Point> points, float angle = 0)
         {
-            this.Points = r;
+            this.Points = points;
+            Angle = angle;
         }
 
         public FindResult(int x, int y, int height, int width)
@@ -19,5 +20,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         }
 
         public IList<Point> Points { get; } = new List<Point>();
+
+        public float Angle { get; }
     }
 }
