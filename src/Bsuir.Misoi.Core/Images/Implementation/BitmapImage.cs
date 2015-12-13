@@ -146,6 +146,13 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
             //Create the Bitmap
             var clipped = new Bitmap(width, height);
+            for (int i = 0; i < clipped.Height; i++)
+            {
+                for (int j = 0; j < clipped.Width; j++)
+                {
+                    clipped.SetPixel(j, i, Color.White);
+                }
+            }
 
             //Draw on the Bitmap
             using (Graphics g = Graphics.FromImage(clipped))
