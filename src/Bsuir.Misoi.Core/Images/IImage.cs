@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using Bsuir.Misoi.Core.Images.Implementation.Hough;
 
 namespace Bsuir.Misoi.Core.Images
 {
@@ -17,5 +19,7 @@ namespace Bsuir.Misoi.Core.Images
         int Width { get; }
 
         IImage Clone();
+
+        void Clip(IList<Point> points, float angle);
     }
 }
