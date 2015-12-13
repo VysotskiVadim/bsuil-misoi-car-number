@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using Bsuir.Misoi.Core.Images.Implementation.Hough;
 
@@ -80,14 +81,80 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             }
         }
 
+        private IEnumerable<IFindResult> DrawLines(IList<Line> lines, int width, int height)
+        {
+            double x1;
+            double y1;
+            double x2;
+            double y2;
+
+            foreach (var line in lines)
+            {
+                if (line.F != 0)
+
+                {
+                    x1 = 0;
+                    y1 = (-Math.Cos(line.FRad) / Math.Sin(line.FRad)) * x1 + (line.R / Math.Sin(line.FRad));
+                    x2 = width - 1;
+                    y2 = (-Math.Cos(line.FRad) / Math.Sin(line.FRad)) * x2 + (line.R / Math.Sin(line.FRad));
+
+                }
+                else
+                {
+                    x1 = line.R;
+                    y1 = 0;
+                    x2 = line.R;
+                    y2 = height;
+                }
+
+                yield return new FindResult(new List<Point> { new Point((int)x1, (int)y1), new Point((int)x2, (int)y2) });
+            }
+        }
+
         private Point FindCrossing(Line first, Line second)
         {
-            double a = first.R + second.R;
-            double b = Math.Sin(first.FRad) + Math.Sin(second.FRad);
-            double c = Math.Cos(first.FRad) + Math.Cos(second.FRad);
+            if (Math.Abs(first.F - second.F) < 0.1)
+            {
+                throw new InvalidOperationException("there is no crossing");
+            }
 
-            double x = (first.R*(b - 1) + second.R)/(Math.Cos(first.FRad)*b - Math.Sin(first.FRad)*c);
-            double y = (a - x * c) / b;
+            Func<double, double> getA = (alpha) =>
+            {
+                return -1.0/Math.Tan(alpha);
+            };
+            Func<double, double, double> getB = (r, alpha) =>
+            {
+                return r/Math.Sin(alpha);
+            };
+
+            bool hasZero = Math.Abs(first.F) < 0.001;
+            if (Math.Abs(second.F) < 0.001)
+            {
+                hasZero = true;
+                var temp = second;
+                second = first;
+                first = temp;
+            }
+
+            double x, y;
+
+            if (hasZero)
+            {
+                x = first.R;
+                double a = getA(second.FRad);
+                double b = getB(second.R, second.FRad);
+                y = a * x + b;
+            }
+            else
+            {
+                double a1 = getA(first.FRad);
+                double a2 = getA(second.FRad);
+                double b1 = getB(first.R, first.FRad);
+                double b2 = getB(second.R, second.FRad);
+
+                x = (b2 - b1)/(a1 - a2);
+                y = a1*x + b1;
+            }
 
             return new Point((int)Math.Round(x), (int)Math.Round(y));
         }
@@ -151,7 +218,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             var third = FindCrossing(lines[1], lines[2]);
             var fourth = FindCrossing(lines[1], lines[3]);
 
-             return new FindResult(new List<Point> { first, second, third, fourth }, (float)lines[1].F);
+            return new FindResult(new List<Point> { first, second, fourth, third }, (float)lines[1].F);
         }
     }
 }
