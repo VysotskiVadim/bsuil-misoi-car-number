@@ -5,6 +5,15 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class FindResultDrawer : IFindResultDrawer
     {
+        private static Pixel[] _pixels = new []
+        {
+            new Pixel {R = 255, G = 69, B = 0 },
+            new Pixel { R = 255, G = 0, B = 0 },
+            new Pixel { R = 255, G = 215, B = 0 },
+            new Pixel { R = 0, G = 255, B = 0 },
+            new Pixel { R = 255, G = 165, B = 0 }
+        };
+
         public void DrawFindResults(IImage image, IEnumerable<IFindResult> results)
         {
             foreach (var selectedArea in results)
@@ -12,12 +21,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                 if (selectedArea.Points.Count >= 2)
                 {
                     var rand = new Random();
-                    var pixel = new Pixel
-                    {
-                        R = (byte) rand.Next(255),
-                        G = (byte) rand.Next(255),
-                        B = (byte) rand.Next(255)
-                    };
+                    var pixel = _pixels[rand.Next(_pixels.Length - 1)];
                     DrawLineAlgorithm.PlotFunction plotFunction = (x, y) =>
                     {
                         

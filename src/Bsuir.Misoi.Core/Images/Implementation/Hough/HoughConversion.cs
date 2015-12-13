@@ -46,7 +46,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation.Hough
                     int y = (int)(r * 10);
                     if (accArr[x, y] > MinPoints)
                     {
-                        lines.Add(new Line(f, r));
+                        lines.Add(new Line(f, r, accArr[x, y]));
                     }
                 }
             }
