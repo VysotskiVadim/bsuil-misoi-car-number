@@ -88,21 +88,74 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
         public void Clip(IList<Point> points, float angle)
         {
-            using (var bitmap = ToBitmap())
-            {
-                using (var newBitmap = new Bitmap(bitmap.Width, bitmap.Height))
-                {
-                    using (var graphics = Graphics.FromImage(newBitmap))
-                    {
-                        graphics.TranslateTransform((float)bitmap.Width / 2, (float)bitmap.Height / 2);
-                        graphics.RotateTransform(angle);
-                        graphics.TranslateTransform(-(float)bitmap.Width / 2, -(float)bitmap.Height / 2);
-                        graphics.DrawImage(bitmap, new System.Drawing.Point(0, 0));
+            //int xOffset = points.Min(p => p.X);
+            //int yOffset = points.Min(p => p.Y);
 
-                        FromBitmap(newBitmap);
-                    }
-                }
+            //GraphicsPath gp = new GraphicsPath();   // a Graphicspath
+            //gp.AddPolygon(points.Select(p => new PointF(p.X, p.Y)).ToArray());        // with one Polygon
+
+            //Bitmap bmp1 = new Bitmap(500, 500);  // ..some new Bitmap
+            //                                     // and some old one..:
+            //using (Bitmap bmp0 = ToBitmap())
+            //{
+            //    using (Graphics g = Graphics.FromImage(bmp1))
+            //    {
+            //        g.Clip = new Region(gp); // restrict drawing region
+            //        g.RotateTransform(45);
+            //        g.DrawImage(bmp0, 0, 0); // draw clipped
+            //    }
+
+            //}
+            //FromBitmap(bmp1);
+
+            int x = 0;
+            int y = 0;
+            int width = 0;
+            int height = 0;
+
+            GraphicsPath gpdest = new GraphicsPath();
+
+            var source = ToBitmap();
+
+            //Your polygon
+            var pesource = points.Select(p => new System.Drawing.Point(p.X, p.Y)).ToArray();
+
+            //Determine the destination size/position
+            x = source.Width;
+            y = source.Height;
+
+            foreach (var p in pesource)
+            {
+                if (p.X < x)
+                    x = p.X;
+                if (p.X > width)
+                    width = p.X;
+
+                if (p.Y < y)
+                    y = p.Y;
+                if (p.Y > height)
+                    height = p.Y;
             }
+
+            height = height - y;
+            width = width - x;
+
+            gpdest.AddPolygon(pesource);
+            Matrix m = new Matrix(1, 0, 0, 1, -x, -y);
+            gpdest.Transform(m);
+
+            //Create the Bitmap
+            var clipped = new Bitmap(width, height);
+
+            //Draw on the Bitmap
+            using (Graphics g = Graphics.FromImage(clipped))
+            {
+                GraphicsPath gpgdi = new GraphicsPath();
+                g.SetClip(gpdest);
+                g.DrawImage(source, -x, -y);
+            }
+
+            FromBitmap(clipped);
         }
 
         public static Bitmap CropRotatedRect(Bitmap source, Rectangle rect, float angle)

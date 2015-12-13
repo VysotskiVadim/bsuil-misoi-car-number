@@ -75,7 +75,11 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                     lines = this.FilterLines(lines);
                     if (lines.Count != 0)
                     {
-                        yield return PrepareResult(lines);
+                        var result = PrepareResult(lines);
+                        if (result != null)
+                        {
+                            yield return result;
+                        }
                     }
                 }
             }
@@ -218,7 +222,17 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             var third = FindCrossing(lines[1], lines[2]);
             var fourth = FindCrossing(lines[1], lines[3]);
 
-            return new FindResult(new List<Point> { first, second, fourth, third }, (float)lines[1].F);
+            var parHeight = Math.Abs(first.Distanse(second));
+            var parWidth = Math.Abs(second.Distanse(fourth));
+            var formFactor = parWidth / (double)parHeight;
+            if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
+            {
+                return new FindResult(new List<Point> {first, second, fourth, third}, (float) lines[1].F);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
