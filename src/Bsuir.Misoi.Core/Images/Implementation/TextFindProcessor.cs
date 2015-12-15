@@ -16,7 +16,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         {
             _image = image;
             var histogram = CalculateLineHistogram();
-            int threashold = (int)(0.9 * histogram.Max());
+            int threashold = (int)(0.93 * histogram.Max());
 
             int startX = 0, endX = 0;
             bool inSegment = false;
@@ -32,13 +32,13 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                 {
                     endX = x - 1;
                     inSegment = false;
-                    //yield return new FindResult(startX, 0, _image.Height - 1, endX - startX);
-                    results.Add(new Frame { StartX = startX , Width = endX - startX });
+                    yield return new FindResult(startX, 0, _image.Height - 1, endX - startX);
+                    //results.Add(new Frame { StartX = startX , Width = endX - startX });
                 }
             }
 
-            var middleWidth = results.Average(r => r.Width);
-            return results.Where(r => r.Width > middleWidth/2.0).Select(r => new FindResult(r.StartX, 0, _image.Height - 1, r.Width));
+            //var middleWidth = 3;//results.Average(r => r.Width);
+            //return results.Where(r => r.Width > middleWidth/2.0).Select(r => new FindResult(r.StartX, 0, _image.Height - 1, r.Width));
         }
 
         public struct Frame
