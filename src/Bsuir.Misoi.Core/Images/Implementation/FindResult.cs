@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenCvSharp.CPlusPlus;
 
 namespace Bsuir.Misoi.Core.Images.Implementation
 {

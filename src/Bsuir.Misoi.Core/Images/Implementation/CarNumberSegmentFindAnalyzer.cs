@@ -1,9 +1,10 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
+using System.Drawing;
 using System.Linq;
+using OpenCvSharp;
 using Bsuir.Misoi.Core.Images.Implementation.Hough;
+using OpenCvSharp.CPlusPlus;
 
 namespace Bsuir.Misoi.Core.Images.Implementation
 {
@@ -66,21 +67,25 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                 var parHeight = Math.Abs(minXminY.Y - minXmaxY.Y);
                 var formFactor = parWidth / (double)parHeight;
                // if ((formFactor > 4.1) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
-                if ((formFactor > 3) && (formFactor < 5.1)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
+                if ((formFactor > 3) && (formFactor < 6)) // 520mm X 113mm  form-factor s/p4,64   a/b = 4,6
                 {
                     //yield return new FindResult(new List<Point> { minXmaxY, minXminY, maxXminY, new Point(maxX.X, maxY.Y) });
-                    var hough = new HoughConversion();
-                    double imageDiagonal = new Point(0, 0).Distanse(new Point(width, height));
-                    IList<Line> lines = hough.AccumulateLines(points, imageDiagonal);
-                    lines = this.FilterLines(lines);
-                    if (lines.Count != 0)
+                    //var hough = new HoughConversion();
+                    var rect = Cv2.MinAreaRect(points.Select(p => new Point2f(p.X, p.Y)));
+                    float resultRectSquare =rect.Size.Width*rect.Size.Height;
+                    formFactor = Math.Max(rect.Size.Width, rect.Size.Height) / Math.Min(rect.Size.Width, rect.Size.Height);
+                    if (segment.Square / resultRectSquare > 0.5 && (rect.Size.Width > 100 || rect.Size.Height > 100) && (formFactor > 4.1) && (formFactor < 6))
                     {
-                        var result = PrepareResult(lines);
-                        if (result != null)
-                        {
-                            yield return result;
-                        }
+                        yield return new FindResult(rect.Points().Select(p => new Point((int)p.X, (int)p.Y)).ToList());
                     }
+                    //if (lines.Count != 0)
+                    //{
+                    //    var result = PrepareResult(lines);
+                    //    if (result != null)
+                    //    {
+                    //        yield return result;
+                    //    }
+                    //}
                 }
             }
         }

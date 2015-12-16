@@ -22,7 +22,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         public void ProcessImage(IImage image)
         {
             var imageForProcessing = image.Clone();
-            _edgeFilter.ProcessImage(imageForProcessing);
+            //_edgeFilter.ProcessImage(imageForProcessing);
             var segments = _segmentationAlgorithm.ProcessImage(imageForProcessing);
             IEnumerable<IFindResult> findResult = _segmentFindAnalyzer.Find(segments);
             _findResultDrawer.DrawFindResults(image, findResult);
