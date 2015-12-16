@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Bsuir.Misoi.Core.Images.Implementation.Image;
+
 namespace Bsuir.Misoi.Core.Images.Implementation
 {
-    public class TextFindProcessor : IFindImageProcessor
+    public class TextFindProcessor : IFindAlgoritm
     {
         public string Name => "Text find processor";
         private IImage _image;

@@ -1,7 +1,9 @@
 ﻿namespace Bsuir.Misoi.Core.Images
 {
-    public interface ICarNumberIdentifyResult
+    public interface IIdentifyResult
     {
         IImage ProcessedImage { get; }
+
+        string CarNumber { get; }
     }
 }

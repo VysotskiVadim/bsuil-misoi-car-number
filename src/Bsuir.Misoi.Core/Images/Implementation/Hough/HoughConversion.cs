@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Bsuir.Misoi.Core.Images.Implementation.Hough
 {
-    public class HoughConversion : IHoughConversion
+    public class HoughConversion 
     {
         public IList<Line> AccumulateLines(List<Point> points, double diagonal)
         {

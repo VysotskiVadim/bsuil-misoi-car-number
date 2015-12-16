@@ -1,8 +1,6 @@
-using System;
-
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Filters
 {
-    public class BinarizationFilter : IBinarizationFilter
+    public class AdaptiveBinarizationFilter : IBinarizationFilter
     {
         public string Name => "Adaptive binarization";
 

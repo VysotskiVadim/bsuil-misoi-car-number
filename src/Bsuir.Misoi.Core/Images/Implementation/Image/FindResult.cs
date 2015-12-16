@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using OpenCvSharp.CPlusPlus;
+﻿using System.Collections.Generic;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
     public class FindResult : IFindResult
     {

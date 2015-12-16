@@ -2,7 +2,7 @@
 
 namespace Bsuir.Misoi.Core.Images
 {
-    public interface IFindImageProcessor
+    public interface IFindAlgoritm
     {
         string Name { get; }
 

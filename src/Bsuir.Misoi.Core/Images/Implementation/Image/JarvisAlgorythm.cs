@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
     public class JarvisAlgorythm
     {

@@ -4,6 +4,6 @@ namespace Bsuir.Misoi.Core.Images
 {
     public interface ICarNumerIdentifyService
     {
-        Task<ICarNumberIdentifyResult> IdentifyAsync(IImage image);
+        Task<IIdentifyResult> IdentifyAsync(IImage image);
     }
 }

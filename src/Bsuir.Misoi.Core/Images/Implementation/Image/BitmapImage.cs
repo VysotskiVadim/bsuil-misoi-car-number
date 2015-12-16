@@ -6,9 +6,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Bsuir.Misoi.Core.Images.Implementation.Hough;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
     public class BitmapImage : IImage
     {

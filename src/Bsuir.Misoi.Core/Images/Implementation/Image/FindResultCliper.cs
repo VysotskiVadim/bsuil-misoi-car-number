@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
-    public class FindResultCliper : IFindResultDrawer
+    public class FindResultCliper : IFindResultsHandler
     {
         public void DrawFindResults(IImage image, IEnumerable<IFindResult> results)
         {

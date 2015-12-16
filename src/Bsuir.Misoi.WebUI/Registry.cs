@@ -1,6 +1,8 @@
 ﻿using Bsuir.Misoi.Core.Images;
 using Bsuir.Misoi.Core.Images.Implementation;
+using Bsuir.Misoi.Core.Images.Implementation.Filters;
 using Bsuir.Misoi.Core.Images.Implementation.Hough;
+using Bsuir.Misoi.Core.Images.Implementation.Image;
 using Bsuir.Misoi.Core.Images.Implementation.Segmentation;
 using Bsuir.Misoi.WebUI.Storage;
 using Bsuir.Misoi.WebUI.Storage.Implementation;
@@ -16,14 +18,13 @@ namespace Bsuir.Misoi.WebUI
             services.AddTransient<IConvolutionFilter, ConvolutionFilter>();
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IImageDataProvider, ImageDataProvider>();
-            services.AddTransient<IBinarizationFilter, BinarizationFilter>();
+            services.AddTransient<IBinarizationFilter, AdaptiveBinarizationFilter>();
             services.AddTransient<IImageProcessorsService, ImageProcessorsService>();
             services.AddTransient<IImageUrlProvider, ImageUrlProvider>();
             services.AddTransient<ISegmentationAlgorithm, SegmentationAlgorithm>();
             services.AddTransient<ICarNumerIdentifyService, CarNumnerIdentifyService>();
-            services.AddTransient<IFindResultDrawer, FindResultDrawer>();
+            services.AddTransient<IFindResultsHandler, FindResultsDrawer>();
             services.AddTransient<ISegmentFindAnalyzer, CarNumberSegmentFindAnalyzer>();
-            services.AddTransient<IHoughConversion, HoughConversion>();
         }
     }
 }

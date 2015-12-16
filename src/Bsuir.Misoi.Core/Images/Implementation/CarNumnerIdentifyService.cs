@@ -8,29 +8,29 @@ namespace Bsuir.Misoi.Core.Images.Implementation
     public class CarNumnerIdentifyService : ICarNumerIdentifyService
     {
         private readonly ISegmentationAlgorithm _segmentationAlgoritm;
-        private readonly IFindResultDrawer _findResultDrawer;
+        private readonly IFindResultsHandler _findResultsHandler;
         private readonly ISegmentFindAnalyzer _segmentFindAnalyzer;
 
-        public CarNumnerIdentifyService(ISegmentationAlgorithm segmentationAlgoritm, IFindResultDrawer findResultDrawer, ISegmentFindAnalyzer segmentFindAnalyzer)
+        public CarNumnerIdentifyService(ISegmentationAlgorithm segmentationAlgoritm, IFindResultsHandler findResultsHandler, ISegmentFindAnalyzer segmentFindAnalyzer)
         {
             _segmentationAlgoritm = segmentationAlgoritm;
-            _findResultDrawer = findResultDrawer;
+            _findResultsHandler = findResultsHandler;
             _segmentFindAnalyzer = segmentFindAnalyzer;
         }
 
-        public Task<ICarNumberIdentifyResult> IdentifyAsync(IImage inputImage)
+        public Task<IIdentifyResult> IdentifyAsync(IImage inputImage)
         {
-            var result = new IdentifyIdentifyResult();
+            var result = new IdentifyResult();
 
             var imageClone = inputImage.Clone();
             var segments = _segmentationAlgoritm.ProcessImage(imageClone);
 
             var selectedAreas = _segmentFindAnalyzer.Find(segments);
 
-            _findResultDrawer.DrawFindResults(inputImage, selectedAreas);
+            _findResultsHandler.DrawFindResults(inputImage, selectedAreas);
             result.ProcessedImage = inputImage;
 
-            return Task.FromResult((ICarNumberIdentifyResult)result);
+            return Task.FromResult((IIdentifyResult)result);
         } 
     }
 }

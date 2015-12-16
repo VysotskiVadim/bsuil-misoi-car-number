@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
-    public class FindResultDrawer : IFindResultDrawer
+    public class FindResultsDrawer : IFindResultsHandler
     {
         private static Pixel[] _pixels = new []
         {

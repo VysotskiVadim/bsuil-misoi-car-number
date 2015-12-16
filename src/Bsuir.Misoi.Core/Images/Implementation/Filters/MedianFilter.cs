@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Filters
 {
     public class MedianFilter : IImageProcessor
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Bsuir.Misoi.Core.Images.Implementation
+namespace Bsuir.Misoi.Core.Images.Implementation.Image
 {
     public class ImageFactory : IImageFactory
     {

@@ -1,4 +1,4 @@
-﻿namespace Bsuir.Misoi.Core.Images.Implementation
+﻿namespace Bsuir.Misoi.Core.Images
 {
     public interface IConvolutionFilter
     {
