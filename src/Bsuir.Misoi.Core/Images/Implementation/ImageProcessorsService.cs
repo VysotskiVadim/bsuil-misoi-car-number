@@ -54,11 +54,12 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         private IEnumerable<IImageProcessor> RegiterProcessors()
         {
             yield return new AdaptiveBinarizationFilter();
+            yield return new OtsuBinarization();
             yield return new GammaFilter();
             yield return new LaplacianFiveFilter(new ConvolutionFilter());
             yield return new MedianFilter();
             yield return new SegmentationFilter(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()));
-            yield return new FindInImageAndHandleResultProcessor(new TextFindProcessor(), new FindResultsDrawer());
+            yield return new FindInImageAndHandleResultProcessor(new TextFindProcessor(new OtsuBinarization()), new FindResultsDrawer());
             yield return new FindInImageAndHandleResultProcessor(new AnalyzeSegmentsFindAloritm(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()), new CarNumberSegmentFindAnalyzer(), "Find car number"), new FindResultsDrawer());
             yield return new FindInImageAndHandleResultProcessor(new AnalyzeSegmentsFindAloritm(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()), new CarNumberSegmentFindAnalyzer(), "Clip car nuber"), new FindResultCliper());
         }
