@@ -17,8 +17,9 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
         public void ProcessImage(IImage image)
         {
-            IEnumerable<IFindResult> findResult = _findAlgoritm.Find(image);
-            _findResultsHandler.DrawFindResults(image, findResult);
+            var imageClone = image.Clone();
+            IEnumerable<IFindResult> findResult = _findAlgoritm.Find(imageClone);
+            _findResultsHandler.HandleFindResults(image, findResult);
         }
     }
 }

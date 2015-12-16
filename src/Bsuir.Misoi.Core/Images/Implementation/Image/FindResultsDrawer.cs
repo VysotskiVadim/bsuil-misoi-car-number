@@ -14,7 +14,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation.Image
             new Pixel { R = 255, G = 165, B = 0 }
         };
 
-        public void DrawFindResults(IImage image, IEnumerable<IFindResult> results)
+        public void HandleFindResults(IImage image, IEnumerable<IFindResult> results)
         {
             foreach (var selectedArea in results)
             {

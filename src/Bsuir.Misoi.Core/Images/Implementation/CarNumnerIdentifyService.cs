@@ -27,7 +27,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
             var selectedAreas = _segmentFindAnalyzer.Find(segments);
 
-            _findResultsHandler.DrawFindResults(inputImage, selectedAreas);
+            _findResultsHandler.HandleFindResults(inputImage, selectedAreas);
             result.ProcessedImage = inputImage;
 
             return Task.FromResult((IIdentifyResult)result);
