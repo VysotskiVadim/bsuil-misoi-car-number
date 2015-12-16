@@ -16,7 +16,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
         {
             _image = image;
             var histogram = CalculateLineHistogram();
-            int threashold = (int)(0.93 * histogram.Max());
+            int threashold = (int)(0.95 * histogram.Max());
 
             int startX = 0, endX = 0;
             bool inSegment = false;

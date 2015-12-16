@@ -88,81 +88,70 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 
         public void Clip(IList<Point> points, float angle)
         {
-            //int xOffset = points.Min(p => p.X);
-            //int yOffset = points.Min(p => p.Y);
-
-            //GraphicsPath gp = new GraphicsPath();   // a Graphicspath
-            //gp.AddPolygon(points.Select(p => new PointF(p.X, p.Y)).ToArray());        // with one Polygon
-
-            //Bitmap bmp1 = new Bitmap(500, 500);  // ..some new Bitmap
-            //                                     // and some old one..:
-            //using (Bitmap bmp0 = ToBitmap())
-            //{
-            //    using (Graphics g = Graphics.FromImage(bmp1))
-            //    {
-            //        g.Clip = new Region(gp); // restrict drawing region
-            //        g.RotateTransform(45);
-            //        g.DrawImage(bmp0, 0, 0); // draw clipped
-            //    }
-
-            //}
-            //FromBitmap(bmp1);
-
             int x = 0;
             int y = 0;
             int width = 0;
             int height = 0;
 
-            GraphicsPath gpdest = new GraphicsPath();
-
-            var source = ToBitmap();
-
-            //Your polygon
-            var pesource = points.Select(p => new System.Drawing.Point(p.X, p.Y)).ToArray();
-
-            //Determine the destination size/position
-            x = source.Width;
-            y = source.Height;
-
-            foreach (var p in pesource)
+            using (GraphicsPath gpdest = new GraphicsPath())
             {
-                if (p.X < x)
-                    x = p.X;
-                if (p.X > width)
-                    width = p.X;
-
-                if (p.Y < y)
-                    y = p.Y;
-                if (p.Y > height)
-                    height = p.Y;
-            }
-
-            height = height - y;
-            width = width - x;
-
-            gpdest.AddPolygon(pesource);
-            Matrix m = new Matrix(1, 0, 0, 1, -x, -y);
-            gpdest.Transform(m);
-
-            //Create the Bitmap
-            var clipped = new Bitmap(width, height);
-            for (int i = 0; i < clipped.Height; i++)
-            {
-                for (int j = 0; j < clipped.Width; j++)
+                using (var source = ToBitmap())
                 {
-                    clipped.SetPixel(j, i, Color.White);
+
+                    //Your polygon
+                    var pesource = points.Select(p => new System.Drawing.Point(p.X, p.Y)).ToArray();
+
+                    //Determine the destination size/position
+                    x = source.Width;
+                    y = source.Height;
+
+                    foreach (var p in pesource)
+                    {
+                        if (p.X < x)
+                            x = p.X;
+                        if (p.X > width)
+                            width = p.X;
+
+                        if (p.Y < y)
+                            y = p.Y;
+                        if (p.Y > height)
+                            height = p.Y;
+                    }
+
+                    height = height - y;
+                    width = width - x;
+
+                    gpdest.AddPolygon(pesource);
+                    Matrix m = new Matrix(1, 0, 0, 1, -x, -y);
+                    gpdest.Transform(m);
+
+                    //Create the Bitmap
+                    using (var clipped = new Bitmap(width, height))
+                    {
+                        for (int i = 0; i < clipped.Height; i++)
+                        {
+                            for (int j = 0; j < clipped.Width; j++)
+                            {
+                                clipped.SetPixel(j, i, Color.White);
+                            }
+                        }
+
+                        //Draw on the Bitmap
+                        using (Graphics g = Graphics.FromImage(clipped))
+                        {
+                            var rotationMatrinx = new Matrix();
+                            rotationMatrinx.RotateAt(angle, new PointF(width / 2, height / 2));
+                            g.Transform = rotationMatrinx;
+                            g.SetClip(gpdest);
+                            g.DrawImage(source, -x, -y);
+                        }
+
+
+
+                        FromBitmap(clipped);
+                    }
                 }
             }
-
-            //Draw on the Bitmap
-            using (Graphics g = Graphics.FromImage(clipped))
-            {
-                GraphicsPath gpgdi = new GraphicsPath();
-                g.SetClip(gpdest);
-                g.DrawImage(source, -x, -y);
-            }
-
-            FromBitmap(clipped);
         }
 
         public static Bitmap CropRotatedRect(Bitmap source, Rectangle rect, float angle)
