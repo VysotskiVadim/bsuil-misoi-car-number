@@ -33,7 +33,10 @@ namespace Bsuir.Misoi.Core.Images.Implementation
                 {
                     endX = x - 1;
                     inSegment = false;
-                    yield return new FindResult(startX, 0, image.Height - 1, endX - startX);
+                    if (endX - startX > 3)
+                    {
+                        yield return new FindResult(startX, 0, image.Height - 1, endX - startX);
+                    }
                 }
             }
         }

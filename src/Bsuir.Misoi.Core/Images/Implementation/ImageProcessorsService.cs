@@ -11,10 +11,12 @@ namespace Bsuir.Misoi.Core.Images.Implementation
 {
     public class ImageProcessorsService : IImageProcessorsService
     {
+        private readonly IImageRepository _imageRepository;
         private readonly List<IImageProcessor> _processors;
 
-        public ImageProcessorsService()
+        public ImageProcessorsService(IImageRepository imageRepository)
         {
+            _imageRepository = imageRepository;
             _processors = new List<IImageProcessor>(RegiterProcessors());
         }
 
@@ -62,6 +64,7 @@ namespace Bsuir.Misoi.Core.Images.Implementation
             yield return new FindInImageAndHandleResultProcessor(new TextFindProcessor(new OtsuBinarization()), new FindResultsDrawer());
             yield return new FindInImageAndHandleResultProcessor(new AnalyzeSegmentsFindAloritm(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()), new CarNumberSegmentFindAnalyzer(), "Find car number"), new FindResultsDrawer());
             yield return new FindInImageAndHandleResultProcessor(new AnalyzeSegmentsFindAloritm(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()), new CarNumberSegmentFindAnalyzer(), "Clip car nuber"), new FindResultCliper());
+            yield return new FindInImageAndHandleResultProcessor(new AnalyzeSegmentsFindAloritm(new SegmentationAlgorithm(new AdaptiveBinarizationFilter()), new CarNumberSegmentFindAnalyzer(), "Display and save letters"), new ClipAndProcessFindResult(new TextFindProcessor(new OtsuBinarization()), new SaveClipedResult(_imageRepository)));
         }
     }
 }

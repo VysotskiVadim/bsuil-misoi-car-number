@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bsuir.Misoi.Core;
 using Bsuir.Misoi.Core.Images;
 
 namespace Bsuir.Misoi.WebUI.Storage.Implementation

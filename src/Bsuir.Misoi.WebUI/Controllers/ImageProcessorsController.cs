@@ -4,6 +4,7 @@ using Microsoft.Net.Http.Headers;
 using Bsuir.Misoi.Core.Images;
 using System;
 using System.IO;
+using Bsuir.Misoi.Core;
 using Bsuir.Misoi.WebUI.Storage;
 using Bsuir.Misoi.WebUI.Models;
 

@@ -1,4 +1,5 @@
-﻿using Bsuir.Misoi.Core.Images;
+﻿using Bsuir.Misoi.Core;
+using Bsuir.Misoi.Core.Images;
 using Bsuir.Misoi.Core.Images.Implementation;
 using Bsuir.Misoi.Core.Images.Implementation.Filters;
 using Bsuir.Misoi.Core.Images.Implementation.Hough;

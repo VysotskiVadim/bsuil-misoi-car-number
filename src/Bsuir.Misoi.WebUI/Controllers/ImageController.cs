@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Bsuir.Misoi.Core;
 using Bsuir.Misoi.Core.Images;
 using Bsuir.Misoi.WebUI.Models;
 using Bsuir.Misoi.WebUI.Storage;
